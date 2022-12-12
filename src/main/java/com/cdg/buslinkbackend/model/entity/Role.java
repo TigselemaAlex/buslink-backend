@@ -7,11 +7,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor()
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Builder
-@DynamoDBTable( tableName = "Roles")
+@DynamoDBTable(tableName = "Roles")
 public class Role {
 
     @DynamoDBHashKey
@@ -20,10 +20,10 @@ public class Role {
 
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute
-    private RoleType rol;
+    private RoleType name;
 
-    public Role(RoleType rol){
-        this.rol = rol;
+    public Role(RoleType name){
+        this.name = name;
     }
 
 

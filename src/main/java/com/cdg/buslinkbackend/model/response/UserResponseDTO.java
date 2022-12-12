@@ -28,5 +28,5 @@ public class UserResponseDTO {
 
     private String username;
 
-    private Role role;
+    private String role;
 }

@@ -26,7 +26,6 @@ public class UserMapper {
                 .status(userRequestDTO.isStatus())
                 .city(userRequestDTO.getCity())
                 .full_name(userRequestDTO.getFull_name())
-                .role(userRequestDTO.getRole())
                 .password(userRequestDTO.getPassword())
                 .build();
     }

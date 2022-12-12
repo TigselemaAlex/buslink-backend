@@ -25,7 +25,11 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private ResponseBuilder responseBuilder;
+
 
     @Override
     public ResponseEntity<ApiResponse> findById(String id) {
@@ -58,7 +62,11 @@ public class UserServiceImpl implements IUserService {
         if(existsByUsername(user.getUsername())){
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El usuario ya existe");
         }
-        User userSaved = userRepository.save(UserMapper.from(user));
+        user.setStatus(true);
+        User userSaved = UserMapper.from(user);
+        String role = roleService.findById(user.getRole_id()).getName().name();
+        userSaved.setRole(role);
+        userSaved = userRepository.save(userSaved);
         UserResponseDTO userResponseDTO = UserMapper.from(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario creado exitosamente", userResponseDTO);
     }
@@ -72,7 +80,8 @@ public class UserServiceImpl implements IUserService {
         userToUpdate.setPassword(user.getPassword());
         userToUpdate.setStatus(user.isStatus());
         userToUpdate.setFull_name(user.getFull_name());
-        userToUpdate.setRole(user.getRole());
+        String role = roleService.findById(user.getRole_id()).getName().name();
+        userToUpdate.setRole(role);
         userToUpdate.setPhone(user.getPhone());
         User userSaved = userRepository.save(userToUpdate);
         UserResponseDTO userResponseDTO = UserMapper.from(userSaved);
