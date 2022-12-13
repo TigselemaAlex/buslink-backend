@@ -25,5 +25,4 @@ public class UserRequestDTO {
 
     private String role_id;
 
-
 }
