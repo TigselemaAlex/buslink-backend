@@ -9,8 +9,14 @@ import com.cdg.buslinkbackend.repository.UserRepository;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import com.cdg.buslinkbackend.util.response.ResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +25,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements IUserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -30,11 +36,14 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private ResponseBuilder responseBuilder;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public ResponseEntity<ApiResponse> findById(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        UserResponseDTO userResponseDTO = UserMapper.from(user);
+        UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(user);
         return responseBuilder
                 .buildResponse(HttpStatus.OK.value(), "Usuario encontrado", userResponseDTO);
     }
@@ -45,7 +54,7 @@ public class UserServiceImpl implements IUserService {
         if (userList.isEmpty()) {
             return responseBuilder.buildResponse(HttpStatus.NO_CONTENT.value(), "No hay usuarios");
         }
-        List<UserResponseDTO> userResponseDTOList = userList.stream().map(UserMapper::from).toList();
+        List<UserResponseDTO> userResponseDTOList = userList.stream().map(UserMapper::userResponseDTOFromUser).toList();
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de usuarios", userResponseDTOList);
     }
 
@@ -59,15 +68,16 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResponseEntity<ApiResponse> save(UserRequestDTO user) {
-        if(existsByUsername(user.getUsername())){
+        if (existsByUsername(user.getUsername())) {
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El usuario ya existe");
         }
         user.setStatus(true);
-        User userSaved = UserMapper.from(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User userSaved = UserMapper.userFromUserRequestDTO(user);
         String role = roleService.findById(user.getRole_id()).getName().name();
         userSaved.setRole(role);
         userSaved = userRepository.save(userSaved);
-        UserResponseDTO userResponseDTO = UserMapper.from(userSaved);
+        UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario creado exitosamente", userResponseDTO);
     }
 
@@ -77,14 +87,14 @@ public class UserServiceImpl implements IUserService {
         userToUpdate.setCi(user.getCi());
         userToUpdate.setCity(user.getCity());
         userToUpdate.setUsername(user.getUsername());
-        userToUpdate.setPassword(user.getPassword());
+        userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
         userToUpdate.setStatus(user.isStatus());
         userToUpdate.setFull_name(user.getFull_name());
         String role = roleService.findById(user.getRole_id()).getName().name();
         userToUpdate.setRole(role);
         userToUpdate.setPhone(user.getPhone());
         User userSaved = userRepository.save(userToUpdate);
-        UserResponseDTO userResponseDTO = UserMapper.from(userSaved);
+        UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario actualizado exitosamente", userResponseDTO);
     }
 
@@ -97,4 +107,9 @@ public class UserServiceImpl implements IUserService {
         throw new UserNotFoundException(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        return UserMapper.userPrincipalFromUser(user);
+    }
 }
