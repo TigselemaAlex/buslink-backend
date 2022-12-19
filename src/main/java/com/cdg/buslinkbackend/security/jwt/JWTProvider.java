@@ -2,41 +2,45 @@ package com.cdg.buslinkbackend.security.jwt;
 
 import com.cdg.buslinkbackend.security.model.UserPrincipal;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.security.Key;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Date;
 
 @Component
 public class JWTProvider {
-    @Value("${jwt.secretKey}")
-    private String jwtSecret;
+
+    private Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     @Value("${jwt.expirationTimeInMs}")
     private int jwExpirationTimeInMs;
 
 
-    public String generateToken(Authentication authentication) throws NoSuchAlgorithmException {
+    public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwExpirationTimeInMs * 1000L * 2);
-        SecretKey secretKey = secretKeyConverse(jwtSecret);
+
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(secretKey)
+                .signWith(jwtSecret)
                 .compact();
     }
 
-    public String getUsernameFromJWT(String token) throws NoSuchAlgorithmException {
-        SecretKey secretKey = secretKeyConverse(jwtSecret);
+    public String getUsernameFromJWT(String token) {
+
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(jwtSecret)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -45,19 +49,17 @@ public class JWTProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            SecretKey secretKey = secretKeyConverse(jwtSecret);
+
             Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(jwtSecret)
                     .build()
                     .parseClaimsJws(authToken);
             return true;
-        } catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException |
-                 NoSuchAlgorithmException e) {
+        } catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException
+                e) {
             return false;
         }
     }
 
-    private SecretKey secretKeyConverse(String jwtSecret) throws NoSuchAlgorithmException {
-        return (SecretKey) KeyGenerator.getInstance(jwtSecret);
-    }
+
 }
