@@ -1,6 +1,6 @@
 package com.cdg.buslinkbackend.security.jwt;
 
-import com.cdg.buslinkbackend.service.user.UserServiceImpl;
+import com.cdg.buslinkbackend.service.auth.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JWTProvider jwtProvider;
 
-    private UserServiceImpl userService;
+    @Autowired
+    private AuthService authService(){
+        return new AuthService();
+    };
+
 
 
     @Override
@@ -29,7 +33,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJWTFromRequest(request);
             if(StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)){
                 String username = jwtProvider.getUsernameFromJWT(jwt);
+
+               
+
                 UserDetails userDetails = userService.loadUserByUsername(username);
+
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
