@@ -1,6 +1,7 @@
 package com.cdg.buslinkbackend.model.mappers;
 
 import com.cdg.buslinkbackend.model.entity.User;
+import com.cdg.buslinkbackend.model.request.ClientRegisterRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserRequestDTO;
 import com.cdg.buslinkbackend.model.response.UserResponseDTO;
 import com.cdg.buslinkbackend.security.model.UserPrincipal;
@@ -44,4 +45,6 @@ public class UserMapper {
                 .authorities(authorities)
                 .build();
     }
+
+
 }
