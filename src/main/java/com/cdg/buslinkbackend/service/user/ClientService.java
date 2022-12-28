@@ -11,6 +11,7 @@ import com.cdg.buslinkbackend.util.response.ResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,9 @@ public class ClientService {
     @Autowired
     private ResponseBuilder responseBuilder;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ResponseEntity<ApiResponse> registerClient(ClientRegisterRequestDTO clientRegisterRequestDTO){
         if(clientRepository.existsByEmail(clientRegisterRequestDTO.getEmail())){
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe una cuenta asosiada a ese email.");
@@ -31,6 +35,7 @@ public class ClientService {
         Client client = ClientMapper.clientFromClientRegisterRequestDTO(clientRegisterRequestDTO);
         client.setRole(RoleType.USER.name());
         client.setStatus(true);
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         client = clientRepository.save(client);
         ClientResponseDTO clientResponseDTO = ClientMapper.clientResponseDTOFromClient(client);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Registro exitoso", clientResponseDTO);

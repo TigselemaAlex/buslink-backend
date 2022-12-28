@@ -21,10 +21,18 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping
-    public ResponseEntity<Map<String, Object>> findAll(){
+    @GetMapping("/admins")
+    public ResponseEntity<Map<String, Object>> findAllAdmins(){
         Map<String, Object> response = new HashMap<>();
-        List<Role> roleList = roleService.findAll();
+        List<Role> roleList = (List<Role>) roleService.findAllAdmins();
+        response.put("roles", roleList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/bus")
+    public ResponseEntity<Map<String, Object>> findAllBusUsers(){
+        Map<String, Object> response = new HashMap<>();
+        List<Role> roleList = (List<Role>) roleService.findAllBusUsers();
         response.put("roles", roleList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

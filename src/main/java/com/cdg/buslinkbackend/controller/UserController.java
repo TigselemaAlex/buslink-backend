@@ -1,5 +1,6 @@
 package com.cdg.buslinkbackend.controller;
 
+import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserRequestDTO;
 import com.cdg.buslinkbackend.service.user.UserServiceImpl;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
@@ -21,14 +22,24 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/admins")
+    public ResponseEntity<ApiResponse> findAllRoleAsAdmins() {
+        return userService.findByRoleAsAdmins();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> findById(@NotBlank(message = "El id no puede estar vacio") @PathVariable final String id) {
         return userService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> save(@Valid @RequestBody final UserRequestDTO userRequestDTO) {
-        return userService.save(userRequestDTO);
+    public ResponseEntity<ApiResponse> saveANT(@Valid @RequestBody final UserRequestDTO userRequestDTO) {
+        return userService.saveANT(userRequestDTO);
+    }
+
+    @PostMapping("/bus_user")
+    public ResponseEntity<ApiResponse> saveBusUser(@Valid @RequestBody final BusUserRequestDTO userRequestDTO) {
+        return userService.saveBusUser(userRequestDTO);
     }
 
     @PutMapping("/{id}")

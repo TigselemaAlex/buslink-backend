@@ -37,4 +37,6 @@ public class UserRequestDTO {
     @NotBlank(message = "El rol no puede estar en blanco")
     private String role_id;
 
+
+
 }
