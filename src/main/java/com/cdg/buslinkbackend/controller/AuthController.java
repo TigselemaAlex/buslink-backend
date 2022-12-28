@@ -1,8 +1,11 @@
 package com.cdg.buslinkbackend.controller;
 
+import com.cdg.buslinkbackend.model.request.ClientLoginRequestDTO;
+import com.cdg.buslinkbackend.model.request.ClientRegisterRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserLoginRequestDTO;
 import com.cdg.buslinkbackend.security.jwt.JWTProvider;
 import com.cdg.buslinkbackend.security.jwt.JWTResponse;
+import com.cdg.buslinkbackend.service.user.ClientService;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import com.cdg.buslinkbackend.util.response.ResponseBuilder;
 import jakarta.validation.Valid;
@@ -26,7 +29,6 @@ import java.security.NoSuchProviderException;
 @RequestMapping("/auth")
 public class AuthController {
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -34,14 +36,37 @@ public class AuthController {
     private JWTProvider jwtProvider;
     @Autowired
     private ResponseBuilder responseBuilder;
+
+    @Autowired
+    private ClientService clientService;
+
+
     @PostMapping("/signin")
     public ResponseEntity<ApiResponse> authenticateUser(@Valid @RequestBody final UserLoginRequestDTO userLoginRequestDTO) throws NoSuchAlgorithmException, NoSuchProviderException {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getUsername(), userLoginRequestDTO.getPassword()));
+        return getApiResponseResponseEntity(authentication);
+    }
+
+
+    @PostMapping("/signin/client")
+    public ResponseEntity<ApiResponse> authenticateUser(@Valid @RequestBody final ClientLoginRequestDTO clientLoginRequestDTO) throws NoSuchAlgorithmException, NoSuchProviderException {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(clientLoginRequestDTO.getEmail(), clientLoginRequestDTO.getPassword()));
+        return getApiResponseResponseEntity(authentication);
+    }
+
+    private ResponseEntity<ApiResponse> getApiResponseResponseEntity(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         JWTResponse jwtResponse = new JWTResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities());
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Usuario logeado exitosamente", jwtResponse);
+    }
+
+
+    @PostMapping("/singup/client")
+    public ResponseEntity<ApiResponse> registerClient(@Valid @RequestBody final ClientRegisterRequestDTO clientRegisterRequestDTO) {
+        return clientService.registerClient(clientRegisterRequestDTO);
     }
 }

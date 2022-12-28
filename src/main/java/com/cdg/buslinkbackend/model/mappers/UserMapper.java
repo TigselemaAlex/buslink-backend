@@ -1,6 +1,7 @@
 package com.cdg.buslinkbackend.model.mappers;
 
 import com.cdg.buslinkbackend.model.entity.User;
+import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserRequestDTO;
 import com.cdg.buslinkbackend.model.response.UserResponseDTO;
 import com.cdg.buslinkbackend.security.model.UserPrincipal;
@@ -35,6 +36,19 @@ public class UserMapper {
                 .build();
     }
 
+    public static User userFromBusUserRequestDTO(BusUserRequestDTO busUserRequestDTO){
+        return User.builder()
+                .ci(busUserRequestDTO.getCi())
+                .phone(busUserRequestDTO.getPhone())
+                .username(busUserRequestDTO.getUsername())
+                .status(busUserRequestDTO.isStatus())
+                .city(busUserRequestDTO.getCity())
+                .full_name(busUserRequestDTO.getFull_name())
+                .password(busUserRequestDTO.getPassword())
+                .build();
+    }
+
+
     public static UserPrincipal userPrincipalFromUser(User user){
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
         return UserPrincipal.builder()
@@ -44,4 +58,6 @@ public class UserMapper {
                 .authorities(authorities)
                 .build();
     }
+
+
 }
