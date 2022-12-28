@@ -3,6 +3,7 @@ package com.cdg.buslinkbackend.service.user;
 import com.cdg.buslinkbackend.exception.UserNotFoundException;
 import com.cdg.buslinkbackend.model.entity.User;
 import com.cdg.buslinkbackend.model.mappers.UserMapper;
+import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserRequestDTO;
 import com.cdg.buslinkbackend.model.response.UserResponseDTO;
 import com.cdg.buslinkbackend.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -52,6 +54,24 @@ public class UserServiceImpl implements IUserService {
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de usuarios", userResponseDTOList);
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> findByRoleAsAdmins(){
+        Collection<String> roles = roleService.findAllAdmins()
+                .stream()
+                .map(
+                        role -> role.getName().name()
+                ).toList();
+        List<User> userList = userRepository.findByRoleIn(roles);
+
+        if(userList.isEmpty()){
+            return responseBuilder.buildResponse(HttpStatus.NO_CONTENT.value(), "No hay usuarios");
+        }
+        List<UserResponseDTO> userResponseDTOList = userList.stream().map(UserMapper::userResponseDTOFromUser).toList();
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de usuarios administradores", userResponseDTOList);
+    }
+
+
+
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
@@ -61,7 +81,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> save(UserRequestDTO user) {
+    public ResponseEntity<ApiResponse> saveANT(UserRequestDTO user) {
         if (existsByUsername(user.getUsername())) {
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El usuario ya existe");
         }
@@ -73,6 +93,23 @@ public class UserServiceImpl implements IUserService {
         userSaved = userRepository.save(userSaved);
         UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario creado exitosamente", userResponseDTO);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> saveBusUser(BusUserRequestDTO busAdminUserRequestDTO) {
+        if (existsByUsername(busAdminUserRequestDTO.getUsername())) {
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El usuario ya existe");
+        }
+        busAdminUserRequestDTO.setStatus(true);
+        busAdminUserRequestDTO.setPassword(passwordEncoder.encode(busAdminUserRequestDTO.getPassword()));
+        User userSaved = UserMapper.userFromBusUserRequestDTO(busAdminUserRequestDTO);
+        String role = roleService.findById(busAdminUserRequestDTO.getRole_id()).getName().name();
+        String coop = "None"; //Cambiar cuando se tenga los servicios de las cooperativas
+        userSaved.setRole(role);
+        userSaved.setCoop_name(coop);
+        userSaved = userRepository.save(userSaved);
+        UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
+        return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario de cooperativa creado exitosamente", userResponseDTO);
     }
 
     @Override

@@ -45,8 +45,10 @@ public class SecurityAdapter {
                 .cors()
                 .and()
                 .csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/protected/**").permitAll() //CAMBIAR ESTO a authorized
+                //.requestMatchers("/auth/**").permitAll()
+                //.requestMatchers("/swagger/**").permitAll()
+                //.requestMatchers("/protected/**").permitAll() //CAMBIAR ESTO a authorized
+                .requestMatchers("/**").permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(
