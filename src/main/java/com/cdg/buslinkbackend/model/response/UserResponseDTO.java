@@ -1,18 +1,14 @@
 package com.cdg.buslinkbackend.model.response;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.cdg.buslinkbackend.model.entity.Role;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @ToString
-@Builder
 public class UserResponseDTO {
     private String id;
 
