@@ -3,6 +3,7 @@ package com.cdg.buslinkbackend.model.mappers;
 import com.cdg.buslinkbackend.model.entity.User;
 import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserRequestDTO;
+import com.cdg.buslinkbackend.model.response.BusUserResponseDTO;
 import com.cdg.buslinkbackend.model.response.UserResponseDTO;
 import com.cdg.buslinkbackend.security.model.UserPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +23,21 @@ public class UserMapper {
                 .full_name(user.getFull_name())
                 .role(user.getRole())
                 .build();
+    }
+
+    public static BusUserResponseDTO busUserResponseDTOFromUser(User user){
+        return BusUserResponseDTO.builder()
+                .id(user.getId())
+                .ci(user.getCi())
+                .phone(user.getPhone())
+                .username(user.getUsername())
+                .status(user.isStatus())
+                .city(user.getCity())
+                .full_name(user.getFull_name())
+                .role(user.getRole())
+                .coop_id(user.getCoop_id())
+                .build();
+
     }
 
     public static User userFromUserRequestDTO(UserRequestDTO userRequestDTO){

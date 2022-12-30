@@ -30,7 +30,7 @@ public class ClientService {
 
     public ResponseEntity<ApiResponse> registerClient(ClientRegisterRequestDTO clientRegisterRequestDTO){
         if(clientRepository.existsByEmail(clientRegisterRequestDTO.getEmail())){
-            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe una cuenta asosiada a ese email.");
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe una cuenta asociada a ese email.");
         }
         Client client = ClientMapper.clientFromClientRegisterRequestDTO(clientRegisterRequestDTO);
         client.setRole(RoleType.USER.name());

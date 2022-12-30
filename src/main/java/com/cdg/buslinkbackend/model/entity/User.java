@@ -42,7 +42,7 @@ public class User {
     private String role;
 
     @DynamoDBAttribute
-    private String coop_name;
+    private String coop_id;
 
 
 }

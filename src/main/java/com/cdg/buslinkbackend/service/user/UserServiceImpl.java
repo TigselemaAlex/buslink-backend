@@ -5,6 +5,7 @@ import com.cdg.buslinkbackend.model.entity.User;
 import com.cdg.buslinkbackend.model.mappers.UserMapper;
 import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.UserRequestDTO;
+import com.cdg.buslinkbackend.model.response.BusUserResponseDTO;
 import com.cdg.buslinkbackend.model.response.UserResponseDTO;
 import com.cdg.buslinkbackend.repository.UserRepository;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -39,6 +41,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ResponseEntity<ApiResponse> findById(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        if(Objects.nonNull(user.getCoop_id())){
+            BusUserResponseDTO busUserResponseDTO = UserMapper.busUserResponseDTOFromUser(user);
+            return responseBuilder
+                    .buildResponse(HttpStatus.OK.value(), "Usuario de cooperativa encontrado", busUserResponseDTO);
+        }
         UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(user);
         return responseBuilder
                 .buildResponse(HttpStatus.OK.value(), "Usuario encontrado", userResponseDTO);
@@ -106,7 +113,7 @@ public class UserServiceImpl implements IUserService {
         String role = roleService.findById(busAdminUserRequestDTO.getRole_id()).getName().name();
         String coop = "None"; //Cambiar cuando se tenga los servicios de las cooperativas
         userSaved.setRole(role);
-        userSaved.setCoop_name(coop);
+        userSaved.setCoop_id(coop);
         userSaved = userRepository.save(userSaved);
         UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario de cooperativa creado exitosamente", userResponseDTO);
@@ -124,6 +131,12 @@ public class UserServiceImpl implements IUserService {
         String role = roleService.findById(user.getRole_id()).getName().name();
         userToUpdate.setRole(role);
         userToUpdate.setPhone(user.getPhone());
+        if(user instanceof  BusUserRequestDTO){
+            userToUpdate.setCoop_id(((BusUserRequestDTO) user).getCoop_id());
+            User userSaved = userRepository.save(userToUpdate);
+            BusUserResponseDTO busUserResponseDTO = UserMapper.busUserResponseDTOFromUser(userSaved);
+            return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario de cooperativa actualizado exitosamente", busUserResponseDTO);
+        }
         User userSaved = userRepository.save(userToUpdate);
         UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario actualizado exitosamente", userResponseDTO);

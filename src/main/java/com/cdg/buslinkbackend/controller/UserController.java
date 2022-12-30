@@ -47,6 +47,11 @@ public class UserController {
         return userService.update(userRequestDTO, id);
     }
 
+    @PutMapping("/bus_user/{id}")
+    public ResponseEntity<ApiResponse> updateBusUser(@NotBlank(message = "El id no puede estar vacio") @PathVariable final String id, @Valid @RequestBody final BusUserRequestDTO userRequestDTO) {
+        return userService.update(userRequestDTO, id);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteById(@NotBlank(message = "El id no puede estar vacio") @PathVariable final String id) {
         return userService.deleteById(id);
