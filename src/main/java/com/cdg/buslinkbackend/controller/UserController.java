@@ -1,7 +1,7 @@
 package com.cdg.buslinkbackend.controller;
 
-import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
-import com.cdg.buslinkbackend.model.request.UserRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.BusUserRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.UserRequestDTO;
 import com.cdg.buslinkbackend.service.user.UserServiceImpl;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import jakarta.validation.Valid;

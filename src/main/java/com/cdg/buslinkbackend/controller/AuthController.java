@@ -1,8 +1,8 @@
 package com.cdg.buslinkbackend.controller;
 
-import com.cdg.buslinkbackend.model.request.ClientLoginRequestDTO;
-import com.cdg.buslinkbackend.model.request.ClientRegisterRequestDTO;
-import com.cdg.buslinkbackend.model.request.UserLoginRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.ClientLoginRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.ClientRegisterRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.UserLoginRequestDTO;
 import com.cdg.buslinkbackend.security.jwt.JWTProvider;
 import com.cdg.buslinkbackend.security.jwt.JWTResponse;
 import com.cdg.buslinkbackend.service.user.ClientService;

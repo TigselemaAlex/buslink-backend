@@ -1,10 +1,10 @@
 package com.cdg.buslinkbackend.model.mappers;
 
 import com.cdg.buslinkbackend.model.entity.User;
-import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
-import com.cdg.buslinkbackend.model.request.UserRequestDTO;
-import com.cdg.buslinkbackend.model.response.BusUserResponseDTO;
-import com.cdg.buslinkbackend.model.response.UserResponseDTO;
+import com.cdg.buslinkbackend.model.request.user.BusUserRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.UserRequestDTO;
+import com.cdg.buslinkbackend.model.response.user.BusUserResponseDTO;
+import com.cdg.buslinkbackend.model.response.user.UserResponseDTO;
 import com.cdg.buslinkbackend.security.model.UserPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

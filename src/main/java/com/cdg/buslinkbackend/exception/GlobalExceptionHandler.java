@@ -2,6 +2,7 @@ package com.cdg.buslinkbackend.exception;
 
 import com.cdg.buslinkbackend.util.response.ErrorDetails;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -77,6 +78,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+    @ExceptionHandler(CooperativeNotFoundException.class)
+    public ResponseEntity<Object> handleCooperativeNotFoundException(CooperativeNotFoundException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "COOPERATIVE NOT FOUND",
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(SizeLimitExceededException.class)
+    public ResponseEntity<Object> handleSizeLimitExceededException(SizeLimitExceededException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "LIMIT EXCEEDED 400KB" ,
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
 
 
 }

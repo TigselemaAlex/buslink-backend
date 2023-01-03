@@ -1,4 +1,4 @@
-package com.cdg.buslinkbackend.model.request;
+package com.cdg.buslinkbackend.model.request.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
