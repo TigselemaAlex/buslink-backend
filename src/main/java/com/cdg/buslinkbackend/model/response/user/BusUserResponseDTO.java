@@ -1,4 +1,4 @@
-package com.cdg.buslinkbackend.model.response;
+package com.cdg.buslinkbackend.model.response.user;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

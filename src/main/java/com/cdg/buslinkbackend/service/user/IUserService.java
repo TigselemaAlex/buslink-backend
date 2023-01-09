@@ -1,7 +1,7 @@
 package com.cdg.buslinkbackend.service.user;
 
-import com.cdg.buslinkbackend.model.request.BusUserRequestDTO;
-import com.cdg.buslinkbackend.model.request.UserRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.BusUserRequestDTO;
+import com.cdg.buslinkbackend.model.request.user.UserRequestDTO;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 
