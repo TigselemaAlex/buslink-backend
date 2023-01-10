@@ -1,12 +1,15 @@
 package com.cdg.buslinkbackend.service.user;
 
+import com.cdg.buslinkbackend.exception.CooperativeNotFoundException;
 import com.cdg.buslinkbackend.exception.UserNotFoundException;
+import com.cdg.buslinkbackend.model.entity.Cooperative;
 import com.cdg.buslinkbackend.model.entity.User;
 import com.cdg.buslinkbackend.model.mappers.UserMapper;
 import com.cdg.buslinkbackend.model.request.user.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.user.UserRequestDTO;
 import com.cdg.buslinkbackend.model.response.user.BusUserResponseDTO;
 import com.cdg.buslinkbackend.model.response.user.UserResponseDTO;
+import com.cdg.buslinkbackend.repository.CooperativeRepository;
 import com.cdg.buslinkbackend.repository.UserRepository;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import com.cdg.buslinkbackend.util.response.ResponseBuilder;
@@ -32,6 +35,9 @@ public class UserServiceImpl implements IUserService {
     private RoleService roleService;
 
     @Autowired
+    private CooperativeRepository cooperativeRepository;
+
+    @Autowired
     private ResponseBuilder responseBuilder;
 
     @Autowired
@@ -41,14 +47,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ResponseEntity<ApiResponse> findById(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        if(Objects.nonNull(user.getCoop_id())){
-            BusUserResponseDTO busUserResponseDTO = UserMapper.busUserResponseDTOFromUser(user);
-            return responseBuilder
-                    .buildResponse(HttpStatus.OK.value(), "Usuario de cooperativa encontrado", busUserResponseDTO);
-        }
-        UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(user);
-        return responseBuilder
-                .buildResponse(HttpStatus.OK.value(), "Usuario encontrado", userResponseDTO);
+        return getApiResponseResponseEntity(user);
     }
 
     @Override
@@ -111,9 +110,9 @@ public class UserServiceImpl implements IUserService {
         busAdminUserRequestDTO.setPassword(passwordEncoder.encode(busAdminUserRequestDTO.getPassword()));
         User userSaved = UserMapper.userFromBusUserRequestDTO(busAdminUserRequestDTO);
         String role = roleService.findById(busAdminUserRequestDTO.getRole_id()).getName().name();
-        String coop = "None"; //Cambiar cuando se tenga los servicios de las cooperativas
+        Cooperative cooperative = getCooperative(busAdminUserRequestDTO);
         userSaved.setRole(role);
-        userSaved.setCoop_id(coop);
+        userSaved.setCooperative(cooperative);
         userSaved = userRepository.save(userSaved);
         UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(userSaved);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario de cooperativa creado exitosamente", userResponseDTO);
@@ -132,7 +131,8 @@ public class UserServiceImpl implements IUserService {
         userToUpdate.setRole(role);
         userToUpdate.setPhone(user.getPhone());
         if(user instanceof  BusUserRequestDTO){
-            userToUpdate.setCoop_id(((BusUserRequestDTO) user).getCoop_id());
+            Cooperative cooperative = getCooperative(((BusUserRequestDTO) user));
+            userToUpdate.setCooperative(cooperative);
             User userSaved = userRepository.save(userToUpdate);
             BusUserResponseDTO busUserResponseDTO = UserMapper.busUserResponseDTOFromUser(userSaved);
             return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Usuario de cooperativa actualizado exitosamente", busUserResponseDTO);
@@ -151,5 +151,27 @@ public class UserServiceImpl implements IUserService {
         throw new UserNotFoundException(id);
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> findByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow( () -> new UserNotFoundException(username));
+        return getApiResponseResponseEntity(user);
+    }
 
+    private ResponseEntity<ApiResponse> getApiResponseResponseEntity(User user) {
+        if(Objects.nonNull(user.getCooperative())){
+            BusUserResponseDTO busUserResponseDTO = UserMapper.busUserResponseDTOFromUser(user);
+            return responseBuilder
+                    .buildResponse(HttpStatus.OK.value(), "Usuario de cooperativa encontrado", busUserResponseDTO);
+        }
+        UserResponseDTO userResponseDTO = UserMapper.userResponseDTOFromUser(user);
+        return responseBuilder
+                .buildResponse(HttpStatus.OK.value(), "Usuario encontrado", userResponseDTO);
+    }
+
+    private Cooperative getCooperative(BusUserRequestDTO busAdminUserRequestDTO) {
+        Cooperative cooperative = cooperativeRepository
+                .findById(busAdminUserRequestDTO.getCoop_id())
+                .orElseThrow(()-> new CooperativeNotFoundException(busAdminUserRequestDTO.getCoop_id()));
+        return cooperative;
+    }
 }

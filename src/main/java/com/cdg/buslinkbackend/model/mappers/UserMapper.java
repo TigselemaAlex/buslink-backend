@@ -35,7 +35,7 @@ public class UserMapper {
                 .city(user.getCity())
                 .full_name(user.getFull_name())
                 .role(user.getRole())
-                .coop_id(user.getCoop_id())
+                .cooperative(CooperativeMapper.cooperativeResponseDTOFromCooperative(user.getCooperative()))
                 .build();
 
     }

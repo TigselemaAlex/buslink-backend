@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
-                "Validation Errors",
+                "ERROR DE VALIDACIÓN",
                 errors
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ErrorDetails errors = new ErrorDetails(
                 LocalDateTime.now(),
-                "Constraint Violation" ,
+                "VIOLACIÓN DE REFERENCIAS" ,
                 details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
@@ -74,7 +75,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         details.add(ex.getMessage());
         ErrorDetails errors = new ErrorDetails(
                 LocalDateTime.now(),
-                "USER NOT FOUND" ,
+                "USUARIO NO ENCONTRADO" ,
                 details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
@@ -85,7 +86,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         details.add(ex.getMessage());
         ErrorDetails errors = new ErrorDetails(
                 LocalDateTime.now(),
-                "COOPERATIVE NOT FOUND",
+                "COOPERATIVA NO ENCONTRADA",
                 details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
@@ -96,11 +97,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         details.add(ex.getMessage());
         ErrorDetails errors = new ErrorDetails(
                 LocalDateTime.now(),
-                "LIMIT EXCEEDED 400KB" ,
+                "TAMAÑO MÁXIMO EXCEDIDO" ,
                 details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<Object> handleRoleNotFoundException(RoleNotFoundException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "ROL NO ENCONTRADO" ,
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<Object> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "CLIENTE NO ENCONTRADO" ,
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
 
 
 }

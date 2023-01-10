@@ -1,5 +1,6 @@
 package com.cdg.buslinkbackend.service.user;
 
+import com.cdg.buslinkbackend.exception.RoleNotFoundException;
 import com.cdg.buslinkbackend.model.entity.Role;
 import com.cdg.buslinkbackend.model.enums.RoleType;
 import com.cdg.buslinkbackend.repository.RoleRepository;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,6 +39,7 @@ public class RoleService {
     }
 
     public Role findById(String id){
-        return roleRepository.findById(id).get();
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        return roleOptional.orElseThrow(() -> new RoleNotFoundException(id));
     }
 }
