@@ -1,5 +1,6 @@
 package com.cdg.buslinkbackend.model.response.user;
 
+import com.cdg.buslinkbackend.model.response.cooperative.CooperativeResponseDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -9,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 public class BusUserResponseDTO extends UserResponseDTO{
-    private String coop_id;
+    private CooperativeResponseDTO cooperative;
 }

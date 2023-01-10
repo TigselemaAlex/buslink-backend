@@ -35,10 +35,12 @@ public class AuthService implements UserDetailsService {
         Pattern pattern = Pattern.compile(emailPattern);
         Matcher matcher = pattern.matcher(username);
         if(matcher.matches()){
-            Client client = clientRepository.findByEmail(username).orElseThrow(()-> new ClientNotFoundException(username));
+            Client client = clientRepository.findByEmail(username)
+                    .orElseThrow(()-> new ClientNotFoundException(username));
             return ClientMapper.userPrincipalFromUser(client);
         }
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
         return UserMapper.userPrincipalFromUser(user);
     }
 

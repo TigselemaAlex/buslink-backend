@@ -32,6 +32,11 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<ApiResponse> findByUsername(@PathVariable final String username){
+        return userService.findByUsername(username);
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse> saveANT(@Valid @RequestBody final UserRequestDTO userRequestDTO) {
         return userService.saveANT(userRequestDTO);
