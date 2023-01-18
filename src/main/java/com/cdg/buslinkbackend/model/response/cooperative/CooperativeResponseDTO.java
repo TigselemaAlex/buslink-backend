@@ -19,5 +19,6 @@ public class CooperativeResponseDTO {
 
     private String address;
 
+    private Integer max;
     private byte[] image;
 }

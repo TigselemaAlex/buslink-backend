@@ -16,5 +16,7 @@ public class CooperativeRequestDTO {
 
     private String address;
 
+    private Integer max;
+
     private MultipartFile image;
 }
