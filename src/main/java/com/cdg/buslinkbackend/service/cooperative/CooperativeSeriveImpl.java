@@ -55,9 +55,7 @@ public class CooperativeSeriveImpl implements ICooperativeService{
 
     @Override
     public ResponseEntity<ApiResponse> save(CooperativeRequestDTO cooperativeRequestDTO) throws IOException {
-
         Cooperative cooperative = CooperativeMapper.cooperativeFromCooperativeRequestDTO(cooperativeRequestDTO);
-
         cooperative.setStatus(true);
         cooperative = cooperativeRepository.save(cooperative);
         CooperativeResponseDTO cooperativeResponseDTO =CooperativeMapper.cooperativeResponseDTOFromCooperative(cooperative);
@@ -71,6 +69,7 @@ public class CooperativeSeriveImpl implements ICooperativeService{
         cooperativeToSave.setName(cooperativeRequest.getName());
         cooperativeToSave.setAddress(cooperativeRequest.getAddress());
         cooperativeToSave.setPhone(cooperativeRequest.getPhone());
+        cooperativeToSave.setMax(cooperativeRequest.getMax());
         if(Objects.nonNull(cooperativeRequest.getImage())){
             cooperativeToSave.setImage(cooperativeRequest.getImage());
         }
