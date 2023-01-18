@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -29,17 +28,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> fieldError
-                        .getField().concat(", ")
-                        .concat(Objects.requireNonNull(fieldError.getDefaultMessage())))
+                .map(fieldError -> fieldError.getDefaultMessage()
+                        )
                 .toList();
 
         List<String> globalErrors = ex.getBindingResult()
                 .getGlobalErrors()
                 .stream()
-                .map(objectError -> objectError
-                        .getObjectName().concat(", ")
-                        .concat(Objects.requireNonNull(objectError.getDefaultMessage())))
+                .map(objectError -> objectError.getDefaultMessage()
+                        )
                 .toList();
 
         List<String> errors = new ArrayList<>();
@@ -59,7 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             Exception ex,
             WebRequest request) {
 
-        List<String> details = new ArrayList<String>();
+        List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
 
         ErrorDetails errors = new ErrorDetails(
