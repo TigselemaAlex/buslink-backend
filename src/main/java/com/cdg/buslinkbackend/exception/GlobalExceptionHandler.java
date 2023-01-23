@@ -121,5 +121,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @ExceptionHandler(FrequencyNotFoundException.class)
+    public ResponseEntity<Object> handleInternalAuthenticationServiceException(FrequencyNotFoundException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "FRECUENCIA NO ENCONTRADA" ,
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
 
 }
