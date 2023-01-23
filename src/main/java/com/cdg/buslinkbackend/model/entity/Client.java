@@ -30,6 +30,5 @@ public class Client {
 
     private String role;
 
-
     private boolean status;
 }

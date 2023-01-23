@@ -4,6 +4,9 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,4 +29,6 @@ public class Cooperative {
     private Integer max;
 
     private byte[] image;
+
+    List<Frequency> frequencies = new ArrayList<>();
 }
