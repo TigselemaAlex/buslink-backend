@@ -2,6 +2,7 @@ package com.cdg.buslinkbackend.model.request.cooperative;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,5 +27,16 @@ public class CooperativeRequestDTO {
     @Size(min = 1, message = "La cantidad mínima permitida por cada cooperativa es de 1")
     private Integer max;
 
+    @NotNull(message = "El estado no puede estar vacio")
+    private Boolean status;
+
     private MultipartFile image;
+
+    public CooperativeRequestDTO(String name, String phone, String address, Integer max, MultipartFile image) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.max = max;
+        this.image = image;
+    }
 }

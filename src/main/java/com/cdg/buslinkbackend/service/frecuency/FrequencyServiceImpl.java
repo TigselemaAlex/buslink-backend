@@ -64,8 +64,14 @@ public class FrequencyServiceImpl implements FrequencyService  {
 
     @Override
     public ResponseEntity<ApiResponse> update(String id, FrequencyRequestDTO frequencyRequestDTO) {
-        if (findByDestinyAndOrigenAndStops(frequencyRequestDTO))
-            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe la frecuencia");
+        Optional<Frequency> optionalFrequency = frequencyRespository.findByDestinyAndOrigenAndStopsAndPriceAndHoursAndMinutesAndType(
+                frequencyRequestDTO.getDestiny(), frequencyRequestDTO.getOrigen(), frequencyRequestDTO.getStops(),
+                frequencyRequestDTO.getPrice(), frequencyRequestDTO.getHours(), frequencyRequestDTO.getMinutes(), frequencyRequestDTO.getType()
+        );
+
+        if(optionalFrequency.isPresent()){
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "La frecuencia ya existe");
+        }
 
         Frequency frequencyToUpdate = frequencyRespository.findById(id).orElseThrow(()-> new FrequencyNotFoundException(id));
         frequencyToUpdate.setType(frequencyRequestDTO.getType());
@@ -73,6 +79,8 @@ public class FrequencyServiceImpl implements FrequencyService  {
         frequencyToUpdate.setDestiny(frequencyRequestDTO.getDestiny());
         frequencyToUpdate.setPrice(frequencyRequestDTO.getPrice());
         frequencyToUpdate.setStops(frequencyRequestDTO.getStops());
+        frequencyToUpdate.setHours(frequencyRequestDTO.getHours());
+        frequencyToUpdate.setMinutes(frequencyRequestDTO.getMinutes());
         frequencyToUpdate = frequencyRespository.save(frequencyToUpdate);
         FrequencyResponseDTO frequencyResponseDTO = FrequencyMapper.frequencyResponseDTOFromFrequency(frequencyToUpdate);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Frecuencia actualizada exitosamente", frequencyResponseDTO);

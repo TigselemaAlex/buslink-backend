@@ -12,6 +12,5 @@ public interface ICooperativeService {
     ResponseEntity<ApiResponse> findById(String id);
     ResponseEntity<ApiResponse> save(CooperativeRequestDTO cooperativeRequestDTO) throws IOException;
     ResponseEntity<ApiResponse> update(String id, CooperativeRequestDTO cooperativeRequestDTO) throws IOException;
-    ResponseEntity<ApiResponse> changeStatus(String id);
     ResponseEntity<ApiResponse> delete(String id);
 }

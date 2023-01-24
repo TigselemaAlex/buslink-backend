@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +54,9 @@ public class CooperativeSeriveImpl implements ICooperativeService{
 
     @Override
     public ResponseEntity<ApiResponse> save(CooperativeRequestDTO cooperativeRequestDTO) throws IOException {
+        if(cooperativeRepository.existsByName(cooperativeRequestDTO.getName())){
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "La cooperativa con ese nombre ya existe");
+        }
         Cooperative cooperative = CooperativeMapper.cooperativeFromCooperativeRequestDTO(cooperativeRequestDTO);
         cooperative.setStatus(true);
         cooperative = cooperativeRepository.save(cooperative);
@@ -70,6 +72,7 @@ public class CooperativeSeriveImpl implements ICooperativeService{
         cooperativeToSave.setAddress(cooperativeRequest.getAddress());
         cooperativeToSave.setPhone(cooperativeRequest.getPhone());
         cooperativeToSave.setMax(cooperativeRequest.getMax());
+        cooperativeToSave.setStatus(cooperativeRequest.getStatus());
         if(Objects.nonNull(cooperativeRequest.getImage())){
             cooperativeToSave.setImage(cooperativeRequest.getImage());
         }
@@ -78,13 +81,7 @@ public class CooperativeSeriveImpl implements ICooperativeService{
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Cooperativa actualizada exitosamente!!!", cooperativeResponseDTO);
     }
 
-    @Override
-    public ResponseEntity<ApiResponse> changeStatus(String id) {
-        Cooperative cooperativeToChange = cooperativeRepository.findById(id).orElseThrow( () -> new CooperativeNotFoundException(id));
-        cooperativeToChange.setStatus(!cooperativeToChange.getStatus());
-        Cooperative cooperative = cooperativeRepository.save(cooperativeToChange);
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), MessageFormat.format("Cooperativa {0} {1}", cooperative.getName(), cooperative.getStatus() ? "Habilitada": "Deshabilitada"));
-    }
+
 
     @Override
     public ResponseEntity<ApiResponse> delete(String id) {
