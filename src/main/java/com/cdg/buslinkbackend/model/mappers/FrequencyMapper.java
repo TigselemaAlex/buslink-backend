@@ -14,6 +14,8 @@ public class FrequencyMapper {
                 .stops(frequency.getStops())
                 .price(frequency.getPrice())
                 .type(frequency.getType())
+                .hours(frequency.getHours())
+                .minutes(frequency.getMinutes())
                 .build();
     }
 
@@ -24,6 +26,8 @@ public class FrequencyMapper {
                 .price(frequencyRequestDTO.getPrice())
                 .stops(frequencyRequestDTO.getStops())
                 .type(frequencyRequestDTO.getType())
+                .hours(frequencyRequestDTO.getHours())
+                .minutes(frequencyRequestDTO.getMinutes())
                 .build();
     }
 }

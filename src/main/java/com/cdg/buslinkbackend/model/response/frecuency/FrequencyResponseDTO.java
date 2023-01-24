@@ -23,5 +23,9 @@ public class FrequencyResponseDTO {
 
     private Double price;
 
+    private Integer hours;
+
+    private Integer minutes;
+
     List<String> stops = new ArrayList<>();
 }

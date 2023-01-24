@@ -28,6 +28,11 @@ public class Frequency {
     @Field(targetType = FieldType.STRING)
     private FrequencyType type;
 
+
+    private Integer hours;
+
+    private Integer minutes;
+
     private Double price;
 
     List<String> stops = new ArrayList<>();

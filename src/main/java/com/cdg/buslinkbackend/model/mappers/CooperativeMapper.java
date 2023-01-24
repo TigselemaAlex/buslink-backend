@@ -27,6 +27,7 @@ public class CooperativeMapper {
                 .address(cooperativeRequestDTO.getAddress())
                 .phone(cooperativeRequestDTO.getPhone())
                 .max(cooperativeRequestDTO.getMax())
+                .status(cooperativeRequestDTO.getStatus())
                 .image(cooperativeRequestDTO.getImage()!= null ? ImageCompressor.compressZLib(cooperativeRequestDTO.getImage().getBytes()): null)
                 .build();
     }
