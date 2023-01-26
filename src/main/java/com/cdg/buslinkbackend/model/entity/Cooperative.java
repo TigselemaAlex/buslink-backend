@@ -31,4 +31,5 @@ public class Cooperative {
     private byte[] image;
 
     List<Frequency> frequencies = new ArrayList<>();
+
 }
