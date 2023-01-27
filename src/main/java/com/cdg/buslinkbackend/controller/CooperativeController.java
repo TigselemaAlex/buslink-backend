@@ -1,6 +1,7 @@
 package com.cdg.buslinkbackend.controller;
 
 import com.cdg.buslinkbackend.model.request.cooperative.CooperativeRequestDTO;
+import com.cdg.buslinkbackend.model.request.cooperative.CooperativeWithFrequenciesRequestDTO;
 import com.cdg.buslinkbackend.service.cooperative.ICooperativeService;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import jakarta.validation.constraints.Min;
@@ -70,4 +71,9 @@ public class CooperativeController {
         return cooperativeService.delete(id);
     }
 
+
+    @PutMapping(value = "/frequencies")
+    public ResponseEntity<ApiResponse> saveFrequencies(@RequestBody final CooperativeWithFrequenciesRequestDTO  requestDTO){
+        return  cooperativeService.saveFrequencies(requestDTO);
+    }
 }
