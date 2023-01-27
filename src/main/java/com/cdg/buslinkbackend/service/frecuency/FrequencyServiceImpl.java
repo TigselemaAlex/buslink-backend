@@ -51,7 +51,7 @@ public class FrequencyServiceImpl implements FrequencyService  {
 
     @Override
     public ResponseEntity<ApiResponse> save(FrequencyRequestDTO frequencyRequestDTO) {
-        if (findByDestinyAndOrigenAndStops(frequencyRequestDTO))
+        if (findByDestinyAndOrigenAndStopsAndType(frequencyRequestDTO))
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe la frecuencia");
         Frequency  frequencyToSave = FrequencyMapper.frequencyFromFrequencyRequestDTO(frequencyRequestDTO);
         frequencyToSave = frequencyRespository.save(frequencyToSave);
@@ -95,11 +95,12 @@ public class FrequencyServiceImpl implements FrequencyService  {
         return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Frecuencia no encontrada");
     }
 
-    private boolean findByDestinyAndOrigenAndStops(FrequencyRequestDTO frequencyRequestDTO) {
-        Optional<Frequency> optionalFrequency = frequencyRespository.findByDestinyAndOrigenAndStops(
+    private boolean findByDestinyAndOrigenAndStopsAndType(FrequencyRequestDTO frequencyRequestDTO) {
+        Optional<Frequency> optionalFrequency = frequencyRespository.findByDestinyAndOrigenAndStopsAndType(
                 frequencyRequestDTO.getDestiny(),
                 frequencyRequestDTO.getOrigen(),
-                frequencyRequestDTO.getStops()
+                frequencyRequestDTO.getStops(),
+                frequencyRequestDTO.getType()
         );
         return optionalFrequency.isPresent();
     }
