@@ -7,4 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CooperativeRepository extends MongoRepository<Cooperative, String> {
     boolean existsByName(String name);
+
+
 }

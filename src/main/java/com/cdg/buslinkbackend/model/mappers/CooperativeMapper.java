@@ -3,6 +3,7 @@ package com.cdg.buslinkbackend.model.mappers;
 import com.cdg.buslinkbackend.model.entity.Cooperative;
 import com.cdg.buslinkbackend.model.request.cooperative.CooperativeRequestDTO;
 import com.cdg.buslinkbackend.model.response.cooperative.CooperativeResponseDTO;
+import com.cdg.buslinkbackend.model.response.cooperative.CooperativeWithFrequenciesResponseDTO;
 import com.cdg.buslinkbackend.util.compressor.ImageCompressor;
 
 import java.io.IOException;
@@ -29,6 +30,14 @@ public class CooperativeMapper {
                 .max(cooperativeRequestDTO.getMax())
                 .status(cooperativeRequestDTO.getStatus())
                 .image(cooperativeRequestDTO.getImage()!= null ? ImageCompressor.compressZLib(cooperativeRequestDTO.getImage().getBytes()): null)
+                .build();
+    }
+
+    public static CooperativeWithFrequenciesResponseDTO cooperativeWithFrequenciesResponseDTOFromCooperative(Cooperative cooperative){
+        return  CooperativeWithFrequenciesResponseDTO.builder()
+                .id(cooperative.getId())
+                .name(cooperative.getName())
+                .frequencies(cooperative.getFrequencies().stream().map(FrequencyMapper::frequencyResponseDTOFromFrequency).toList())
                 .build();
     }
 }
