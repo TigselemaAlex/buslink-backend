@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping (value = "/protected/itineraries")
 public class ItineraryController {
@@ -26,6 +28,9 @@ public class ItineraryController {
 
     @GetMapping()
     public ResponseEntity<ApiResponse> find (@RequestBody(required = false) final ItinerarySearchDTO itinerarySearchDTO){
+        if(Objects.isNull(itinerarySearchDTO)){
+            return itineraryService.findByOrigenOrDestiny(null, null);
+        }
         return itineraryService.findByOrigenOrDestiny(itinerarySearchDTO.getOrigen(), itinerarySearchDTO.getDestiny());
     }
 }
