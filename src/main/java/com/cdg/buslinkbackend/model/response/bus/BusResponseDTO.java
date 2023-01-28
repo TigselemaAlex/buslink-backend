@@ -1,6 +1,5 @@
 package com.cdg.buslinkbackend.model.response.bus;
 
-import com.cdg.buslinkbackend.model.entity.Itinerary;
 import com.cdg.buslinkbackend.model.entity.Seating;
 import com.cdg.buslinkbackend.model.response.cooperative.CooperativeResponseDTO;
 import lombok.*;
@@ -23,6 +22,5 @@ public class BusResponseDTO {
     private Double vipPrice;
     private Integer busNumber;
     private List<Seating> seating;
-    private List<Itinerary> itineraries;
     private CooperativeResponseDTO cooperative;
 }

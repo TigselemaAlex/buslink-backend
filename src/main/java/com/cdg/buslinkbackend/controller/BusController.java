@@ -1,8 +1,6 @@
 package com.cdg.buslinkbackend.controller;
 
-import com.cdg.buslinkbackend.model.entity.Bus;
 import com.cdg.buslinkbackend.model.request.bus.BusRequestDTO;
-import com.cdg.buslinkbackend.repository.BusRepository;
 import com.cdg.buslinkbackend.service.bus.BusService;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -10,16 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/protected/buses")
 public class BusController {
 
     private final BusService busService;
 
-    @Autowired
-    private BusRepository busRepository;
 
     @Autowired
     public BusController(BusService busService) {
@@ -36,8 +30,20 @@ public class BusController {
         return busService.findAllByCooperative(id);
     }
 
-    @GetMapping(value = "/cooperative/origen/{name}")
-    public List<Bus> findAllByOrigen(@PathVariable final String name){
-        return busRepository.findByCooperativeName("Libertadores");
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse> findById(@PathVariable final String id){
+        return busService.findById(id);
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse> update(@PathVariable final String id, @RequestBody final BusRequestDTO busRequestDTO){
+        return busService.update(id, busRequestDTO);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse> delete(@PathVariable final String id){
+        return busService.delete(id);
+    }
+
+
 }

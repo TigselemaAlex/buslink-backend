@@ -1,12 +1,9 @@
 package com.cdg.buslinkbackend.model.request.bus;
 
-import com.cdg.buslinkbackend.model.entity.Itinerary;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -35,7 +32,6 @@ public class BusRequestDTO {
     private Double vipPrice;
     private Integer startVip;
     private Integer endVip;
-    private List<Itinerary> itineraries;
     @NotBlank(message = "El id de la cooperativa no puede estar vacio")
     private String cooperative_id;
 }

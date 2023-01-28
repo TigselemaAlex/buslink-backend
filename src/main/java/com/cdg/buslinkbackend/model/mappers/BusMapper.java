@@ -18,7 +18,6 @@ public class BusMapper {
                     .busNumber(busRequestDTO.getBusNumber())
                     .seatingNumber(busRequestDTO.getSeatingNumber())
                     .vipPrice(busRequestDTO.getVipPrice())
-                    .itineraries(busRequestDTO.getItineraries())
                     .cooperative(cooperative)
                     .seating(seatingList)
                     .build();
@@ -34,7 +33,6 @@ public class BusMapper {
                 .busNumber(bus.getBusNumber())
                 .seating(bus.getSeating())
                 .vipPrice(bus.getVipPrice())
-                .itineraries(bus.getItineraries())
                 .cooperative(CooperativeMapper
                         .cooperativeResponseDTOFromCooperative(bus.getCooperative()))
                 .build();

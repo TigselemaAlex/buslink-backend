@@ -1,18 +1,24 @@
 package com.cdg.buslinkbackend.model.entity;
 
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "itineraries")
 public class Itinerary {
-    @DBRef
+
+    @Id
+    private String id;
+    @DocumentReference
+    private Bus bus;
+    @DocumentReference
     private Frequency  frequency;
     private String departure_time;
-    private List<Integer> available_seats;
+
 }

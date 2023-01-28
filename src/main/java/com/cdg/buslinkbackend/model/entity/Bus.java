@@ -3,8 +3,8 @@ package com.cdg.buslinkbackend.model.entity;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
@@ -28,8 +28,7 @@ public class Bus {
     @Value("0.0")
     private Double vipPrice;
     private List<Seating> seating;
-    private List<Itinerary> itineraries;
-    @DBRef
+    @DocumentReference
     private Cooperative cooperative;
 
 

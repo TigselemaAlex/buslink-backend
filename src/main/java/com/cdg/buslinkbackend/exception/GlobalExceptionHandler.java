@@ -122,12 +122,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(FrequencyNotFoundException.class)
-    public ResponseEntity<Object> handleInternalAuthenticationServiceException(FrequencyNotFoundException ex, WebRequest request){
+    public ResponseEntity<Object> handleFrequencyNotFoundException(FrequencyNotFoundException ex, WebRequest request){
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
         ErrorDetails errors = new ErrorDetails(
                 LocalDateTime.now(),
                 "FRECUENCIA NO ENCONTRADA" ,
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(BusNotFoundException.class)
+    public ResponseEntity<Object> handleBusNotFoundException(BusNotFoundException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "BUS NO ENCONTRADO" ,
                 details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }

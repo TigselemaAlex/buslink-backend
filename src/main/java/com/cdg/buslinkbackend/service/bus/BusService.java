@@ -8,11 +8,6 @@ public interface BusService {
     ResponseEntity<ApiResponse> save(BusRequestDTO  busRequestDTO);
     ResponseEntity<ApiResponse> findAllByCooperative(String cooperative_id);
     ResponseEntity<ApiResponse> findById( String id);
-    ResponseEntity<ApiResponse> findAllByOrigen(String origen);
-    ResponseEntity<ApiResponse> findAllByDestiny(String destiny);
-    ResponseEntity<ApiResponse> findAllByOrigenAndDestiny(String origen, String destiny);
-
-
-
-
+    ResponseEntity<ApiResponse> update(String id, BusRequestDTO busRequestDTO);
+    ResponseEntity<ApiResponse> delete(String id);
 }
