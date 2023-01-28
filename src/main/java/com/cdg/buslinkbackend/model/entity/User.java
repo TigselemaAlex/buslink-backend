@@ -2,6 +2,7 @@ package com.cdg.buslinkbackend.model.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -42,7 +43,7 @@ public class User {
 
     private String role;
 
-
+    @DBRef
     private Cooperative cooperative;
 
 

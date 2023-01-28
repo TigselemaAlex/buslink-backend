@@ -88,4 +88,40 @@ public class BusServiceImpl implements BusService{
         BusResponseDTO busResponseDTO = BusMapper.busResponseDTOFromBus(bus);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Bus registrado exitosamente", busResponseDTO);
     }
+
+    @Override
+    public ResponseEntity<ApiResponse> findAllByCooperative(String cooperative_id) {
+        Cooperative cooperative = cooperativeRepository.findById(cooperative_id).orElseThrow( () -> new CooperativeNotFoundException(cooperative_id));
+        List<Bus> buses = busRepository.findAllByCooperative(cooperative);
+        if(buses.isEmpty()){
+            return responseBuilder.buildResponse(HttpStatus.OK.value(), "No hay buses que mostrar");
+        }
+        /*List<BusResponseDTO> responseDTOS = buses.stream().map(BusMapper::busResponseDTOFromBus).toList();*/
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de buses de la cooperativa: ".concat(cooperative.getName()), buses);
+    }
+
+
+    @Override
+    public ResponseEntity<ApiResponse> findById(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> findAllByOrigen(String origen) {
+
+
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> findAllByDestiny(String destiny) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> findAllByOrigenAndDestiny(String origen, String destiny) {
+        return null;
+    }
+
+
 }
