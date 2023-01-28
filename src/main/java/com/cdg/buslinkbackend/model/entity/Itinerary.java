@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Document(collection = "itineraries")
 public class Itinerary {
 
@@ -19,6 +20,11 @@ public class Itinerary {
     private Bus bus;
     @DocumentReference
     private Frequency  frequency;
-    private String departure_time;
+    private String departureTime;
 
+    public Itinerary(Bus bus, Frequency frequency, String departureTime) {
+        this.bus = bus;
+        this.frequency = frequency;
+        this.departureTime = departureTime;
+    }
 }
