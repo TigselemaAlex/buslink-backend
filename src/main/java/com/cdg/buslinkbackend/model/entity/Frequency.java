@@ -28,7 +28,6 @@ public class Frequency {
     @Field(targetType = FieldType.STRING)
     private FrequencyType type;
 
-
     private Integer hours;
 
     private Integer minutes;

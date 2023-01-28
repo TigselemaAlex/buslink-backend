@@ -3,6 +3,7 @@ package com.cdg.buslinkbackend.model.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +31,7 @@ public class Cooperative {
 
     private byte[] image;
 
+    @DocumentReference
     List<Frequency> frequencies = new ArrayList<>();
+
 }
