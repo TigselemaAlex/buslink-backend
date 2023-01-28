@@ -1,7 +1,6 @@
 package com.cdg.buslinkbackend.model.entity;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -25,7 +24,7 @@ public class Bus {
     private String chassis;
     private Integer busNumber;
     private Integer seatingNumber;
-    @Value("0.0")
+
     private Double vipPrice;
     private List<Seating> seating;
     @DocumentReference
