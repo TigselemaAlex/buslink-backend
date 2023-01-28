@@ -1,5 +1,6 @@
 package com.cdg.buslinkbackend.service.user;
 
+import com.cdg.buslinkbackend.exception.ClientNotFoundException;
 import com.cdg.buslinkbackend.model.entity.Client;
 import com.cdg.buslinkbackend.model.enums.RoleType;
 import com.cdg.buslinkbackend.model.mappers.ClientMapper;
@@ -39,5 +40,11 @@ public class ClientService {
         client = clientRepository.save(client);
         ClientResponseDTO clientResponseDTO = ClientMapper.clientResponseDTOFromClient(client);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Registro exitoso", clientResponseDTO);
+    }
+
+    public ResponseEntity<ApiResponse> findByEmail(String email){
+        Client client = clientRepository.findByEmail(email).orElseThrow(() -> new ClientNotFoundException(email));
+        ClientResponseDTO clientResponseDTO = ClientMapper.clientResponseDTOFromClient(client);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Cliente encontrado exitosamente", clientResponseDTO);
     }
 }

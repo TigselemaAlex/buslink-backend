@@ -2,6 +2,7 @@ package com.cdg.buslinkbackend.controller;
 
 import com.cdg.buslinkbackend.model.request.user.BusUserRequestDTO;
 import com.cdg.buslinkbackend.model.request.user.UserRequestDTO;
+import com.cdg.buslinkbackend.service.user.ClientService;
 import com.cdg.buslinkbackend.service.user.UserServiceImpl;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -10,12 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @RestController
 @RequestMapping(value = "/protected/users")
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private ClientService clientService;
 
     @GetMapping
     public ResponseEntity<ApiResponse> findAll() {
@@ -34,6 +41,14 @@ public class UserController {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<ApiResponse> findByUsername(@PathVariable final String username){
+        String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
+                "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(username);
+        if(matcher.matches()){
+
+            return clientService.findByEmail(username);
+        }
         return userService.findByUsername(username);
     }
 
