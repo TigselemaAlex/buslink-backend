@@ -5,7 +5,9 @@ import com.cdg.buslinkbackend.exception.FrequencyNotFoundException;
 import com.cdg.buslinkbackend.model.entity.Bus;
 import com.cdg.buslinkbackend.model.entity.Frequency;
 import com.cdg.buslinkbackend.model.entity.Itinerary;
+import com.cdg.buslinkbackend.model.mappers.ItineraryMapper;
 import com.cdg.buslinkbackend.model.request.itinerary.ItineraryRequestDTO;
+import com.cdg.buslinkbackend.model.response.itinerary.ItineraryResponseDTO;
 import com.cdg.buslinkbackend.repository.BusRepository;
 import com.cdg.buslinkbackend.repository.FrequencyRespository;
 import com.cdg.buslinkbackend.repository.ItineraryRepository;
@@ -78,8 +80,11 @@ public class ItineraryServiceImpl implements ItineraryService {
                     itinerary -> itinerary.getFrequency().getDestiny().equals(destiny) && itinerary.getFrequency().getOrigen().equals(origen)
             ).toList();
         } else{
-            return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de itinerarios", itineraries);
+
+            List<ItineraryResponseDTO> itineraryResponseDTOS = itineraries.stream().map(ItineraryMapper::itineraryResponseDTOFromItinerary).toList();
+            return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de itinerarios", itineraryResponseDTOS);
         }
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de itinerarios filtrados", filter);
+        List<ItineraryResponseDTO> itineraryResponseDTOS = filter.stream().map(ItineraryMapper::itineraryResponseDTOFromItinerary).toList();
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de itinerarios filtrados", itineraryResponseDTOS);
     }
 }
