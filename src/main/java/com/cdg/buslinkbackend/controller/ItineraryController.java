@@ -26,7 +26,7 @@ public class ItineraryController {
         return itineraryService.save(itineraryRequestDTO);
     }
 
-    @PostMapping ()
+    @PostMapping (value = "/find")
     public ResponseEntity<ApiResponse> find (@RequestBody(required = false) final ItinerarySearchDTO itinerarySearchDTO){
         if(Objects.isNull(itinerarySearchDTO)){
             return itineraryService.findByOrigenOrDestiny(null, null);
