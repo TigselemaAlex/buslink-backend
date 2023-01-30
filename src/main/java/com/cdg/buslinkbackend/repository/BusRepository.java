@@ -19,6 +19,6 @@ public interface BusRepository extends MongoRepository<Bus, String> {
 
     Optional<Bus> findByBusNumber(Integer busNumber);
 
-
+    long countAllByCooperativeIsNull();
 
 }

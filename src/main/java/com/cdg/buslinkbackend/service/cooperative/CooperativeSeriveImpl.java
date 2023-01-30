@@ -8,7 +8,6 @@ import com.cdg.buslinkbackend.model.mappers.CooperativeMapper;
 import com.cdg.buslinkbackend.model.request.cooperative.CooperativeRequestDTO;
 import com.cdg.buslinkbackend.model.request.cooperative.CooperativeWithFrequenciesRequestDTO;
 import com.cdg.buslinkbackend.model.response.cooperative.CooperativeResponseDTO;
-import com.cdg.buslinkbackend.model.response.cooperative.CooperativeWithFrequenciesResponseDTO;
 import com.cdg.buslinkbackend.repository.CooperativeRepository;
 import com.cdg.buslinkbackend.repository.FrequencyRespository;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
@@ -103,23 +102,14 @@ public class CooperativeSeriveImpl implements ICooperativeService {
     public ResponseEntity<ApiResponse> saveFrequencies(CooperativeWithFrequenciesRequestDTO cooperativeWithFrequenciesRequestDTO) {
 
         Cooperative cooperative = cooperativeRepository.findById(cooperativeWithFrequenciesRequestDTO.getCooperative_id()).orElseThrow(() -> new CooperativeNotFoundException(cooperativeWithFrequenciesRequestDTO.getCooperative_id()));
-        Cooperative finalCooperative = cooperative;
-        cooperativeWithFrequenciesRequestDTO.getFrequencies_ids().forEach(
-                id -> {
-                    if (!existFrequency(finalCooperative.getFrequencies(), id)) {
-                        Frequency frequency = frequencyRespository.findById(id).orElseThrow(() -> new FrequencyNotFoundException(id));
-                        finalCooperative.getFrequencies().add(frequency);
-                    }
-                }
-        );
-        cooperative = cooperativeRepository.save(finalCooperative);
-        CooperativeWithFrequenciesResponseDTO cooperativeWithFrequenciesResponseDTO = CooperativeMapper.cooperativeWithFrequenciesResponseDTOFromCooperative(cooperative);
+        List<Frequency> frequencies = cooperativeWithFrequenciesRequestDTO.getFrequencies_ids().stream().map(
+                id -> frequencyRespository.findById(id).orElseThrow(() -> new FrequencyNotFoundException(id))
+        ).toList();
+        cooperative.setFrequencies(frequencies);
+        cooperative = cooperativeRepository.save(cooperative);
+        CooperativeResponseDTO cooperativeWithFrequenciesResponseDTO = CooperativeMapper.cooperativeResponseDTOFromCooperative(cooperative);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Listado de frecuencias actualizado exitosamente", cooperativeWithFrequenciesResponseDTO);
 
-    }
-
-    private boolean existFrequency(List<Frequency> frequencies, String frequency_id) {
-        return frequencies.stream().anyMatch(f -> f.getId().equals(frequency_id));
     }
 
 
