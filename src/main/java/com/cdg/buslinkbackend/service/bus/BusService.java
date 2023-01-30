@@ -10,4 +10,6 @@ public interface BusService {
     ResponseEntity<ApiResponse> findById( String id);
     ResponseEntity<ApiResponse> update(String id, BusRequestDTO busRequestDTO);
     ResponseEntity<ApiResponse> delete(String id);
+
+    ResponseEntity<ApiResponse> resetSeating(String id);
 }

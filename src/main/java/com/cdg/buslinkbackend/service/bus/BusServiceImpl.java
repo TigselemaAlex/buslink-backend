@@ -159,4 +159,15 @@ public class BusServiceImpl implements BusService{
         throw new BusNotFoundException(id);
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> resetSeating(String id) {
+        Bus bus = busRepository.findById(id).orElseThrow( () -> new BusNotFoundException(id));
+        bus.setSeating(bus.getSeating().stream().peek(
+                seating -> seating.setStatus(SeatingStatus.LIBRE)
+        ).toList());
+        bus = busRepository.save(bus);
+        BusResponseDTO busResponseDTO = BusMapper.busResponseDTOFromBus(bus);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Bus reseteado", busResponseDTO);
+    }
+
 }

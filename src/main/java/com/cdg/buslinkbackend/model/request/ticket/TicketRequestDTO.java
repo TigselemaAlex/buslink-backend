@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 @ToString
 public class TicketRequestDTO {
-
     private String cooperative;
     private Integer busNumber;
     private String client_id;

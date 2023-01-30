@@ -143,5 +143,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ResponseEntity<Object> handleTicketNotFoundException(TicketNotFoundException ex, WebRequest request){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorDetails errors = new ErrorDetails(
+                LocalDateTime.now(),
+                "TICKET NO ENCONTRADO" ,
+                details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
 
 }
