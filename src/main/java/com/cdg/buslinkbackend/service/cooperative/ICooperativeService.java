@@ -15,4 +15,5 @@ public interface ICooperativeService {
     ResponseEntity<ApiResponse> update(String id, CooperativeRequestDTO cooperativeRequestDTO) throws IOException;
     ResponseEntity<ApiResponse> delete(String id);
     ResponseEntity<ApiResponse> saveFrequencies(CooperativeWithFrequenciesRequestDTO cooperativeWithFrequenciesRequestDTO);
+
 }
