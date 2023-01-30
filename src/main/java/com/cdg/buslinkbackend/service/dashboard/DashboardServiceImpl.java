@@ -60,6 +60,6 @@ public class DashboardServiceImpl implements DashboardService{
                            count.getAndIncrement();
                        }
         });
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Cantidad de frecuencias", count);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Cantidad de Buses sin Frecuencia", count);
     }
 }
