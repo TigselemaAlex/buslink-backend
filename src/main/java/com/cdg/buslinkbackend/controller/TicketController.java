@@ -24,5 +24,6 @@ public class TicketController {
     @PostMapping
     public ResponseEntity<ApiResponse> save(@RequestBody final TicketRequestDTO ticketRequestDTO){
         return ticketService.saveTicket(ticketRequestDTO);
+
     }
 }
