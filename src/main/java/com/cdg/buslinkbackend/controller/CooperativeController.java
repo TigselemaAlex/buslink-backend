@@ -77,5 +77,4 @@ public class CooperativeController {
         return cooperativeService.saveFrequencies(cooperativeWithFrequenciesRequestDTO);
     }
 
-
 }

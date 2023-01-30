@@ -1,6 +1,9 @@
 package com.cdg.buslinkbackend.model.response.cooperative;
 
+import com.cdg.buslinkbackend.model.response.frecuency.FrequencyResponseDTO;
 import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -20,5 +23,7 @@ public class CooperativeResponseDTO {
     private String address;
 
     private Integer max;
+
+    private List<FrequencyResponseDTO>  frequencies;
     private byte[] image;
 }
