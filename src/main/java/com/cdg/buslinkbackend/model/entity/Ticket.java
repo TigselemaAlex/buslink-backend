@@ -35,5 +35,6 @@ public class Ticket {
     @Field(targetType = FieldType.STRING)
     private TicketStatus status;
     private byte[] receipt;
+    private byte[] qr;
 
 }

@@ -72,8 +72,10 @@ public class CooperativeController {
     }
 
 
-    @PutMapping(value = "/frequencies")
-    public ResponseEntity<ApiResponse> saveFrequencies(@RequestBody final CooperativeWithFrequenciesRequestDTO  requestDTO){
-        return  cooperativeService.saveFrequencies(requestDTO);
+    @PutMapping(value = "/save/frequencies")
+    public  ResponseEntity<ApiResponse> saveFrequencies(@RequestBody final CooperativeWithFrequenciesRequestDTO cooperativeWithFrequenciesRequestDTO){
+        return cooperativeService.saveFrequencies(cooperativeWithFrequenciesRequestDTO);
     }
+
+
 }

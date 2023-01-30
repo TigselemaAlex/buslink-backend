@@ -45,5 +45,9 @@ public class BusController {
         return busService.delete(id);
     }
 
+    @PutMapping(value = "/reset/{id}")
+    public ResponseEntity<ApiResponse> resetSeating(@PathVariable final String id){
+        return busService.resetSeating(id);
+    }
 
 }
