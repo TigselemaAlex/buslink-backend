@@ -19,4 +19,6 @@ public interface TicketService {
     ResponseEntity<ApiResponse> verifyReceipt(String id) throws IOException, WriterException;
 
     ResponseEntity<ApiResponse> findByClient(String idClient);
+
+    ResponseEntity<ApiResponse> checkTicket(String id);
 }

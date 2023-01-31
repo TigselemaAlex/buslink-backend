@@ -49,4 +49,9 @@ public class TicketController {
     public ResponseEntity<ApiResponse> findByClient(@PathVariable String id){
         return ticketService.findByClient(id);
     }
+
+    @PutMapping(value = "/check/{id}")
+    public ResponseEntity<ApiResponse> checkTicket(@PathVariable final String id){
+        return ticketService.checkTicket(id);
+    }
 }
