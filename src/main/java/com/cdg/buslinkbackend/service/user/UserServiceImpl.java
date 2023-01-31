@@ -124,7 +124,9 @@ public class UserServiceImpl implements IUserService {
         userToUpdate.setCi(user.getCi());
         userToUpdate.setCity(user.getCity());
         userToUpdate.setUsername(user.getUsername());
-        userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(Objects.nonNull(user.getPassword())){
+            userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userToUpdate.setStatus(user.isStatus());
         userToUpdate.setFull_name(user.getFull_name());
         String role = roleService.findById(user.getRole_id()).getName().name();

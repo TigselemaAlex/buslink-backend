@@ -30,8 +30,7 @@ public class UserRequestDTO {
     @Size(min = 5, max = 20, message = "El usuario debe tener entre 5 a 20 caracteres")
     private String username;
 
-    @NotBlank(message = "La contraseña no puede estar en blanco")
-    @Size(min = 6, max = 12, message = "La contraseña debe tener entre 6 a 12 caracteres")
+
     private String password;
 
     @NotBlank(message = "El rol no puede estar en blanco")
