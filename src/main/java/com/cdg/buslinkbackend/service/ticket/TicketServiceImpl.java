@@ -128,7 +128,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public ResponseEntity<ApiResponse> checkTicket(String id) {
         Ticket ticket = ticketRepository.findById(id).orElseThrow( () -> new TicketNotFoundException(id));
-        if(ticket.getStatus().equals(TicketStatus.REVISADO) && ticket.getQr() != null){
+        if (ticket.getCheck()){
+            return responseBuilder.buildResponse(HttpStatus.OK.value(), "El ticket ya se ha verificado");
+        }
+        if(ticket.getStatus().equals(TicketStatus.REVISADO) && ticket.getQr() != null && !ticket.getCheck()){
             ticket.setCheck(true);
             ticketRepository.save(ticket);
             return responseBuilder.buildResponse(HttpStatus.OK.value(), "Ticket verificado, puede ingresar al bus");
