@@ -16,9 +16,9 @@ public class CooperativeMapper {
                 .phone(cooperative.getPhone())
                 .status(cooperative.getStatus())
                 .max(cooperative.getMax())
-                .frequencies(cooperative.getFrequencies().stream().map(
+                .frequencies(cooperative.getFrequencies() != null ? cooperative.getFrequencies().stream().map(
                         FrequencyMapper::frequencyResponseDTOFromFrequency
-                ).toList())
+                ).toList() : null)
                 .image(cooperative.getImage()!= null ? ImageCompressor.decompressZLib(cooperative.getImage()) : null )
                 .address(cooperative.getAddress())
                 .build();
