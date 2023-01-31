@@ -37,4 +37,6 @@ public class Ticket {
     private byte[] receipt;
     private byte[] qr;
 
+    private Boolean check;
+
 }

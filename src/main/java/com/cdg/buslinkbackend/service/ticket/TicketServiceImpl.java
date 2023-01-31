@@ -77,6 +77,7 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = TicketMapper.ticketFromTicketRequestDTO(ticketRequestDTO, seatingList);
         ticket.setStatus(TicketStatus.PENDIENTE);
         ticket.setCreatedAt(new Date());
+        ticket.setCheck(false);
         ticket.setClient(client);
         ticket = ticketRepository.save(ticket);
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Compra exitosa", ticket);
@@ -124,7 +125,19 @@ public class TicketServiceImpl implements TicketService {
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de todos los tickets del cliente", tickets);
     }
 
-
+    @Override
+    public ResponseEntity<ApiResponse> checkTicket(String id) {
+        Ticket ticket = ticketRepository.findById(id).orElseThrow( () -> new TicketNotFoundException(id));
+        if(ticket.getStatus().equals(TicketStatus.REVISADO) && ticket.getQr() != null){
+            ticket.setCheck(true);
+            ticketRepository.save(ticket);
+            return responseBuilder.buildResponse(HttpStatus.OK.value(), "Ticket verificado, puede ingresar al bus");
+        } else if (ticket.getStatus().equals(TicketStatus.PENDIENTE)) {
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El ticket aun no ha sido verificado");
+        }else{
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El ticket esta caducado o no es válido");
+        }
+    }
 
 
 }
