@@ -33,6 +33,9 @@ public class ClientService {
         if(clientRepository.existsByEmail(clientRegisterRequestDTO.getEmail())){
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe una cuenta asociada a ese email.");
         }
+        if(clientRepository.existsByCi(clientRegisterRequestDTO.getCi())){
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "Ya existe un usuario con esa cedula.");
+        }
         Client client = ClientMapper.clientFromClientRegisterRequestDTO(clientRegisterRequestDTO);
         client.setRole(RoleType.USER.name());
         client.setStatus(true);
@@ -44,6 +47,12 @@ public class ClientService {
 
     public ResponseEntity<ApiResponse> findByEmail(String email){
         Client client = clientRepository.findByEmail(email).orElseThrow(() -> new ClientNotFoundException(email));
+        ClientResponseDTO clientResponseDTO = ClientMapper.clientResponseDTOFromClient(client);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Cliente encontrado exitosamente", clientResponseDTO);
+    }
+
+    public ResponseEntity<ApiResponse> findByCedula(String ci){
+        Client client = clientRepository.findByCi(ci).orElseThrow(() -> new ClientNotFoundException(ci));
         ClientResponseDTO clientResponseDTO = ClientMapper.clientResponseDTOFromClient(client);
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Cliente encontrado exitosamente", clientResponseDTO);
     }

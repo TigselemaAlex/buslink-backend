@@ -77,4 +77,9 @@ public class UserController {
         return userService.deleteById(id);
     }
 
+    @GetMapping(value = "/client/ci/{ci}")
+    public ResponseEntity<ApiResponse> findByCi(@PathVariable final String ci){
+        return clientService.findByCedula(ci);
+    }
+
 }
