@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+/**
+ * BusRequestDTO is a class that contains the information of a bus
+ */
 @Getter
 @Setter
 @ToString
@@ -13,9 +16,9 @@ import lombok.*;
 @NoArgsConstructor
 public class BusRequestDTO {
 
-    @NotBlank (message = "La marca no puede estar vacia")
+    @NotBlank(message = "La marca no puede estar vacia")
     private String brand;
-    @NotBlank (message = "El modelo no puede estar vacio")
+    @NotBlank(message = "El modelo no puede estar vacio")
     private String model;
     @NotBlank(message = "La placa no puede estar vacia")
     private String plate;

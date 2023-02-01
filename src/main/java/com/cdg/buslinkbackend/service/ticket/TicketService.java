@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 
+// An interface.
 public interface TicketService {
 
     ResponseEntity<ApiResponse> saveTicket(TicketRequestDTO ticketRequestDTO);

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This class is used to create a new cooperative
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,6 +34,7 @@ public class CooperativeRequestDTO {
 
     private MultipartFile image;
 
+    // A constructor.
     public CooperativeRequestDTO(String name, String phone, String address, Integer max, MultipartFile image) {
         this.name = name;
         this.phone = phone;

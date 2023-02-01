@@ -4,6 +4,11 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * ItineraryRequestDTO is a class that has a String bus_id and a List of
+ * ItineraryFrequencyDetailDTO
+ * objects
+ */
 @Getter
 @Setter
 @NoArgsConstructor

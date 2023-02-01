@@ -6,6 +6,12 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FrequencyResponseDTO is a class that has a String id, a String origen, a
+ * String destiny, a
+ * FrequencyType type, a Double price, an Integer hours, an Integer minutes, and
+ * a List of String stops
+ */
 @Getter
 @Setter
 @ToString

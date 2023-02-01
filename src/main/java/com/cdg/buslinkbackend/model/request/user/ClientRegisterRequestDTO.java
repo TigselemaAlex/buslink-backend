@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class is used to receive the data from the client when registering
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +26,6 @@ public class ClientRegisterRequestDTO {
 
     @NotBlank(message = "La ciudad no puede estar en blanco")
     private String city;
-
 
     @NotBlank(message = "El email no puede estar en blanco")
     @Email(message = "El email no tiene el formato adecuado")

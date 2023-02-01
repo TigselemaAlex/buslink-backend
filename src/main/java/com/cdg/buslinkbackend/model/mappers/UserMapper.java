@@ -11,8 +11,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * > This class is a mapper that maps a user to a userDTO
+ */
 public class UserMapper {
-    public static UserResponseDTO userResponseDTOFromUser(User user){
+    /**
+     * It takes a User object and returns a UserResponseDTO object
+     * 
+     * @param user The user object that you want to convert to a UserResponseDTO
+     *             object.
+     * @return A UserResponseDTO object
+     */
+    public static UserResponseDTO userResponseDTOFromUser(User user) {
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .ci(user.getCi())
@@ -25,7 +35,13 @@ public class UserMapper {
                 .build();
     }
 
-    public static BusUserResponseDTO busUserResponseDTOFromUser(User user){
+    /**
+     * It takes a User object and returns a BusUserResponseDTO object
+     * 
+     * @param user User
+     * @return A BusUserResponseDTO object
+     */
+    public static BusUserResponseDTO busUserResponseDTOFromUser(User user) {
         return BusUserResponseDTO.builder()
                 .id(user.getId())
                 .ci(user.getCi())
@@ -40,7 +56,15 @@ public class UserMapper {
 
     }
 
-    public static User userFromUserRequestDTO(UserRequestDTO userRequestDTO){
+    /**
+     * It takes a UserRequestDTO object and returns a User object
+     * 
+     * @param userRequestDTO This is the object that contains the data that will be
+     *                       used to create the
+     *                       user.
+     * @return A User object
+     */
+    public static User userFromUserRequestDTO(UserRequestDTO userRequestDTO) {
         return User.builder()
                 .ci(userRequestDTO.getCi())
                 .phone(userRequestDTO.getPhone())
@@ -52,7 +76,13 @@ public class UserMapper {
                 .build();
     }
 
-    public static User userFromBusUserRequestDTO(BusUserRequestDTO busUserRequestDTO){
+    /**
+     * It takes a BusUserRequestDTO object and returns a User object
+     * 
+     * @param busUserRequestDTO This is the object that is passed to the method.
+     * @return A User object
+     */
+    public static User userFromBusUserRequestDTO(BusUserRequestDTO busUserRequestDTO) {
         return User.builder()
                 .ci(busUserRequestDTO.getCi())
                 .phone(busUserRequestDTO.getPhone())
@@ -64,9 +94,15 @@ public class UserMapper {
                 .build();
     }
 
-
-    public static UserPrincipal userPrincipalFromUser(User user){
-        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
+    /**
+     * It takes a user object and returns a UserPrincipal object
+     * 
+     * @param user The user object that we are converting to UserPrincipal
+     * @return A UserPrincipal object
+     */
+    public static UserPrincipal userPrincipalFromUser(User user) {
+        List<SimpleGrantedAuthority> authorities = Collections
+                .singletonList(new SimpleGrantedAuthority(user.getRole()));
         return UserPrincipal.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
@@ -74,6 +110,5 @@ public class UserMapper {
                 .authorities(authorities)
                 .build();
     }
-
 
 }

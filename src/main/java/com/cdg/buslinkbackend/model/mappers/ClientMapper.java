@@ -9,8 +9,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * It takes a ClientRegisterRequestDTO object and returns a Client object
+ */
+
 public class ClientMapper {
-    public static Client clientFromClientRegisterRequestDTO(ClientRegisterRequestDTO clientRegisterRequestDTO){
+    /**
+     * It takes a ClientRegisterRequestDTO object and returns a Client object
+     * 
+     * @param clientRegisterRequestDTO
+     * @return A Client object
+     */
+    public static Client clientFromClientRegisterRequestDTO(ClientRegisterRequestDTO clientRegisterRequestDTO) {
         return Client.builder()
                 .ci(clientRegisterRequestDTO.getCi())
                 .email(clientRegisterRequestDTO.getEmail())
@@ -21,7 +31,13 @@ public class ClientMapper {
                 .build();
     }
 
-    public static ClientResponseDTO clientResponseDTOFromClient(Client client){
+    /**
+     * It takes a Client object and returns a ClientResponseDTO object
+     * 
+     * @param client the object that is going to be converted
+     * @return A ClientResponseDTO object
+     */
+    public static ClientResponseDTO clientResponseDTOFromClient(Client client) {
         return ClientResponseDTO.builder()
                 .id(client.getId())
                 .role(client.getRole())
@@ -34,8 +50,15 @@ public class ClientMapper {
                 .build();
     }
 
-    public static UserPrincipal userPrincipalFromUser(Client client){
-        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(client.getRole()));
+    /**
+     * It takes a user object and returns a user principal object
+     * 
+     * @param client the client object that is returned from the database
+     * @return A UserPrincipal object
+     */
+    public static UserPrincipal userPrincipalFromUser(Client client) {
+        List<SimpleGrantedAuthority> authorities = Collections
+                .singletonList(new SimpleGrantedAuthority(client.getRole()));
         return UserPrincipal.builder()
                 .username(client.getEmail())
                 .password(client.getPassword())

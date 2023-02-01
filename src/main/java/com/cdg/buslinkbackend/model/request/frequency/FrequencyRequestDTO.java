@@ -10,6 +10,11 @@ import org.hibernate.validator.constraints.Range;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FrequencyRequestDTO is a class that has a String origen, a String destiny, a
+ * FrequencyType type, a
+ * Double price, an Integer hours, an Integer minutes, and a List stops
+ */
 @Getter
 @Setter
 @ToString
@@ -28,15 +33,15 @@ public class FrequencyRequestDTO {
     private FrequencyType type;
 
     @NotNull(message = "El precio base no puede estar vacio")
-    @DecimalMin( value = "0.01", message = "El precio debe ser mayor a 0")
+    @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
     private Double price;
 
     @NotNull(message = "Las horas no pueden estar vacias")
-    @Range(min = 0 , max = 23, message = "Las horas debe estar entre 0 y 23")
+    @Range(min = 0, max = 23, message = "Las horas debe estar entre 0 y 23")
     private Integer hours;
 
     @NotNull(message = "Los minutos no pueden estar vacios")
-    @Range(min = 0 , max = 59, message = "Los minutos deben estar entre 0 y 59")
+    @Range(min = 0, max = 59, message = "Los minutos deben estar entre 0 y 59")
     private Integer minutes;
 
     List<String> stops = new ArrayList<>();

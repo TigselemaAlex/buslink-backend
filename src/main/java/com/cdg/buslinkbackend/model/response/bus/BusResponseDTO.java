@@ -6,6 +6,9 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * BusResponseDTO is a class that has a list of Seating objects
+ */
 @Getter
 @Setter
 @ToString

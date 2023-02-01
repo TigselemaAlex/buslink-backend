@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Ticket is a class that represents a ticket
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -2,9 +2,14 @@ package com.cdg.buslinkbackend.exception;
 
 import java.text.MessageFormat;
 
-public class FrequencyNotFoundException extends RuntimeException{
+/**
+ * This class is a custom exception that is thrown when a frequency is not found
+ */
+public class FrequencyNotFoundException extends RuntimeException {
 
-    public FrequencyNotFoundException(String message){
+    // A constructor that takes a string as a parameter and passes it to the super
+    // class.
+    public FrequencyNotFoundException(String message) {
         super(MessageFormat.format("Frequency not found: {0}", message));
     }
 }

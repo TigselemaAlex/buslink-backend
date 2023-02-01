@@ -5,6 +5,10 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * CooperativeResponseDTO is a class that has a list of FrequencyResponseDTO
+ * objects
+ */
 @AllArgsConstructor
 @Getter
 @Setter
@@ -24,6 +28,6 @@ public class CooperativeResponseDTO {
 
     private Integer max;
 
-    private List<FrequencyResponseDTO>  frequencies;
+    private List<FrequencyResponseDTO> frequencies;
     private byte[] image;
 }
