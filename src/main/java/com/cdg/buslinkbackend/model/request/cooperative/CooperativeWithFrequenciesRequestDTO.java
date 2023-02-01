@@ -4,6 +4,10 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * This class is a DTO that contains a cooperative_id and a list of
+ * frequencies_ids.
+ */
 @Getter
 @Setter
 @ToString

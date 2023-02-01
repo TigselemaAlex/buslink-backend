@@ -13,20 +13,21 @@ import java.util.List;
 @SpringBootApplication
 public class BusLinkBackendApplication {
 
+    /**
+     * If the database is empty, add the roles to the database
+     */
     public static void main(String[] args) {
-        ConfigurableApplicationContext configurableApplicationContext =
-                SpringApplication.run(BusLinkBackendApplication.class, args
-        );
+        ConfigurableApplicationContext configurableApplicationContext = SpringApplication
+                .run(BusLinkBackendApplication.class, args);
         RoleRepository roleRepository = configurableApplicationContext.getBean(RoleRepository.class);
-        if(((List<Role>)roleRepository.findAll()).isEmpty()){
+        if (((List<Role>) roleRepository.findAll()).isEmpty()) {
             List<Role> roleList = new ArrayList<>(List.of(
                     new Role(RoleType.ANT_ADMIN),
                     new Role(RoleType.USER),
                     new Role(RoleType.ANT),
                     new Role(RoleType.OFFICE_WORKER),
                     new Role(RoleType.BUS_CONTROLLER),
-                    new Role(RoleType.BUS_ADMIN)
-            ));
+                    new Role(RoleType.BUS_ADMIN)));
             roleRepository.saveAll(roleList);
         }
 

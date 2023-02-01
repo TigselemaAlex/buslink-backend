@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+/**
+ * It's a controller that has two methods: one for logging in, and one for
+ * registering.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -40,22 +44,54 @@ public class AuthController {
     @Autowired
     private ClientService clientService;
 
-
+    /**
+     * Authenticate the user and return a response entity with the authentication
+     * token.
+     * 
+     * @param userLoginRequestDTO This is a DTO class that contains the username and
+     *                            password.
+     * @return ResponseEntity&lt;ApiResponse&gt;
+     */
     @PostMapping("/signin")
-    public ResponseEntity<ApiResponse> authenticateUser(@Valid @RequestBody final UserLoginRequestDTO userLoginRequestDTO) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public ResponseEntity<ApiResponse> authenticateUser(
+            @Valid @RequestBody final UserLoginRequestDTO userLoginRequestDTO)
+            throws NoSuchAlgorithmException, NoSuchProviderException {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getUsername(), userLoginRequestDTO.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getUsername(),
+                        userLoginRequestDTO.getPassword()));
         return getApiResponseResponseEntity(authentication);
     }
 
-
+    // A method that is called when the user tries to log in. It takes a
+    // ClientLoginRequestDTO object
+    // as a parameter, and returns a ResponseEntity<ApiResponse> object.
     @PostMapping("/signin/client")
-    public ResponseEntity<ApiResponse> authenticateUser(@Valid @RequestBody final ClientLoginRequestDTO clientLoginRequestDTO) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public ResponseEntity<ApiResponse> authenticateUser(
+            @Valid @RequestBody final ClientLoginRequestDTO clientLoginRequestDTO)
+            throws NoSuchAlgorithmException, NoSuchProviderException {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(clientLoginRequestDTO.getEmail(), clientLoginRequestDTO.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(clientLoginRequestDTO.getEmail(),
+                        clientLoginRequestDTO.getPassword()));
         return getApiResponseResponseEntity(authentication);
     }
 
+    /**
+     * It sets the authentication in the security context, generates a JWT token,
+     * gets the user details
+     * from the authentication, creates a JWT response object and returns a response
+     * entity with the
+     * JWT response object
+     * 
+     * @param authentication The authentication object that was created by the
+     *                       authentication manager.
+     * @return A ResponseEntity object with the following properties:
+     *         - Status: 200
+     *         - Message: "Usuario logeado exitosamente"
+     *         - Body: JWTResponse object with the following properties:
+     *         - jwt: The JWT token
+     *         - username: The username
+     *         - authorities: The authorities
+     */
     private ResponseEntity<ApiResponse> getApiResponseResponseEntity(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
@@ -64,9 +100,17 @@ public class AuthController {
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Usuario logeado exitosamente", jwtResponse);
     }
 
-
+    /**
+     * It takes a ClientRegisterRequestDTO object as a parameter, and returns a
+     * ResponseEntity<ApiResponse> object
+     * 
+     * @param clientRegisterRequestDTO This is the object that will be sent to the
+     *                                 server.
+     * @return ResponseEntity<ApiResponse>
+     */
     @PostMapping("/singup/client")
-    public ResponseEntity<ApiResponse> registerClient(@Valid @RequestBody final ClientRegisterRequestDTO clientRegisterRequestDTO) {
+    public ResponseEntity<ApiResponse> registerClient(
+            @Valid @RequestBody final ClientRegisterRequestDTO clientRegisterRequestDTO) {
         return clientService.registerClient(clientRegisterRequestDTO);
     }
 }

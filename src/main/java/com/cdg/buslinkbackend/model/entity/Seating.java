@@ -6,6 +6,9 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+/**
+ * The Seating class has a number, type and status
+ */
 @Getter
 @Setter
 @ToString

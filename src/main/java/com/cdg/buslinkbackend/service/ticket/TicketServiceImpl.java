@@ -33,6 +33,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * It's a service class that implements the TicketService interface.
+ */
 @Service
 @Transactional
 public class TicketServiceImpl implements TicketService {
@@ -41,38 +44,55 @@ public class TicketServiceImpl implements TicketService {
 
     private final BusRepository busRepository;
 
-
     private final ResponseBuilder responseBuilder;
 
     private final ClientRepository clientRepository;
 
-    public TicketServiceImpl(TicketRepository ticketRepository, BusRepository busRepository, ResponseBuilder responseBuilder, ClientRepository clientRepository) {
+    // It's a constructor.
+    public TicketServiceImpl(TicketRepository ticketRepository, BusRepository busRepository,
+            ResponseBuilder responseBuilder, ClientRepository clientRepository) {
         this.ticketRepository = ticketRepository;
         this.busRepository = busRepository;
         this.responseBuilder = responseBuilder;
         this.clientRepository = clientRepository;
     }
 
+    /**
+     * The function receives a ticketRequestDTO object, which contains the bus
+     * number, the client id
+     * and the seatings that the client wants to buy. The function checks if the bus
+     * exists, if the
+     * client exists and if the seatings are available. If everything is ok, the
+     * function saves the
+     * ticket and returns a response
+     * 
+     * @param ticketRequestDTO
+     * @return A ResponseEntity<ApiResponse>
+     */
     @Override
     public ResponseEntity<ApiResponse> saveTicket(TicketRequestDTO ticketRequestDTO) {
-        Bus bus = busRepository.findByBusNumber(ticketRequestDTO.getBusNumber()).orElseThrow( () -> new BusNotFoundException(ticketRequestDTO.getBusNumber().toString()));
+        Bus bus = busRepository.findByBusNumber(ticketRequestDTO.getBusNumber())
+                .orElseThrow(() -> new BusNotFoundException(ticketRequestDTO.getBusNumber().toString()));
 
-        Client client = clientRepository.findById(ticketRequestDTO.getClient_id()).orElseThrow( () -> new ClientNotFoundException(ticketRequestDTO.getClient_id()));
+        Client client = clientRepository.findById(ticketRequestDTO.getClient_id())
+                .orElseThrow(() -> new ClientNotFoundException(ticketRequestDTO.getClient_id()));
 
         List<Seating> seatingList = bus.getSeating().stream().filter(
-                seating -> ticketRequestDTO.getSeatings().contains(seating.getNumber()) && seating.getStatus().equals(SeatingStatus.LIBRE)
-        ).peek(seating -> seating.setStatus(SeatingStatus.OCUPADO)).toList();
+                seating -> ticketRequestDTO.getSeatings().contains(seating.getNumber())
+                        && seating.getStatus().equals(SeatingStatus.LIBRE))
+                .peek(seating -> seating.setStatus(SeatingStatus.OCUPADO)).toList();
 
-        if(seatingList.isEmpty() || seatingList.size() != ticketRequestDTO.getSeatings().size()){
-            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El o los asientos no estan disponibles");
+        if (seatingList.isEmpty() || seatingList.size() != ticketRequestDTO.getSeatings().size()) {
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(),
+                    "El o los asientos no estan disponibles");
         }
         bus.getSeating().forEach(
                 seating -> {
-                    if(ticketRequestDTO.getSeatings().contains(seating.getNumber()) && seating.getStatus().equals(SeatingStatus.LIBRE)){
+                    if (ticketRequestDTO.getSeatings().contains(seating.getNumber())
+                            && seating.getStatus().equals(SeatingStatus.LIBRE)) {
                         seating.setStatus(SeatingStatus.OCUPADO);
                     }
-                }
-        );
+                });
         busRepository.save(bus);
         Ticket ticket = TicketMapper.ticketFromTicketRequestDTO(ticketRequestDTO, seatingList);
         ticket.setStatus(TicketStatus.PENDIENTE);
@@ -83,27 +103,54 @@ public class TicketServiceImpl implements TicketService {
         return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Compra exitosa", ticket);
     }
 
+    /**
+     * It takes a byte array, compresses it, saves it to the database, then
+     * decompresses it and returns
+     * it
+     * 
+     * @param ticketReceiptRequestDTO This is the object that contains the image in
+     *                                byte[] format.
+     * @return A byte array.
+     */
     @Override
     public ResponseEntity<ApiResponse> setReciept(TicketReceiptRequestDTO ticketReceiptRequestDTO) throws IOException {
-        Ticket ticket = ticketRepository.findById(ticketReceiptRequestDTO.getId()).orElseThrow( () -> new TicketNotFoundException(ticketReceiptRequestDTO.getId()));
+        Ticket ticket = ticketRepository.findById(ticketReceiptRequestDTO.getId())
+                .orElseThrow(() -> new TicketNotFoundException(ticketReceiptRequestDTO.getId()));
         ticket.setReceipt(ImageCompressor.compressZLib(ticketReceiptRequestDTO.getReceipt().getBytes()));
         ticket = ticketRepository.save(ticket);
         ticket.setReceipt(ImageCompressor.decompressZLib(ticket.getReceipt()));
-        return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "En espera a que sea verificado su recibo", ticket);
+        return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "En espera a que sea verificado su recibo",
+                ticket);
     }
 
+    /**
+     * It gets all the tickets from the database, then it iterates over them and
+     * sets the receipt to
+     * the decompressed version of the receipt
+     * 
+     * @return A list of tickets with the receipt decompressed.
+     */
     @Override
     public ResponseEntity<ApiResponse> findAll() {
         List<Ticket> tickets = ticketRepository.findAll().stream().peek(
-                ticket -> ticket.setReceipt(ticket.getReceipt()!= null ? ImageCompressor.decompressZLib(ticket.getReceipt()) : null)
-        ).toList();
+                ticket -> ticket.setReceipt(
+                        ticket.getReceipt() != null ? ImageCompressor.decompressZLib(ticket.getReceipt()) : null))
+                .toList();
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de todos los tickets", tickets);
     }
 
+    /**
+     * It takes a ticket id, checks if it's status is PENDIENTE, if it is, it
+     * generates a QR code and
+     * sets the status to REVISADO
+     * 
+     * @param id the id of the ticket
+     * @return A QR code in the form of a byte array.
+     */
     @Override
     public ResponseEntity<ApiResponse> verifyReceipt(String id) throws IOException, WriterException {
-        Ticket ticket = ticketRepository.findById(id).orElseThrow( () -> new TicketNotFoundException(id));
-        if(ticket.getStatus().equals(TicketStatus.PENDIENTE)) {
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new TicketNotFoundException(id));
+        if (ticket.getStatus().equals(TicketStatus.PENDIENTE)) {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(ticket.getId(), BarcodeFormat.QR_CODE, 200, 200);
             ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
@@ -114,33 +161,55 @@ public class TicketServiceImpl implements TicketService {
             ticket = ticketRepository.save(ticket);
             return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "Código QR generado", ticket);
         }
-        return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El ticket esta caducado o ya esta verificado");
+        return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(),
+                "El ticket esta caducado o ya esta verificado");
     }
 
+    /**
+     * It gets all the tickets from the database, then it iterates over them and
+     * sets the receipt to
+     * the decompressed version of the receipt
+     * 
+     * @param idClient String
+     * @return A list of tickets
+     */
     @Override
     public ResponseEntity<ApiResponse> findByClient(String idClient) {
         List<Ticket> tickets = ticketRepository.findAll().stream().peek(
-                ticket -> ticket.setReceipt(ticket.getReceipt()!= null ? ImageCompressor.decompressZLib(ticket.getReceipt()) : null)
-        ).toList();
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de todos los tickets del cliente", tickets);
+                ticket -> ticket.setReceipt(
+                        ticket.getReceipt() != null ? ImageCompressor.decompressZLib(ticket.getReceipt()) : null))
+                .toList();
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Listado de todos los tickets del cliente",
+                tickets);
     }
 
+    /**
+     * The function checks if the ticket has been checked, if it has been checked it
+     * returns a
+     * response, if it hasn't been checked it checks if the ticket is valid and if
+     * it is valid it sets
+     * the ticket as checked and returns a response, if it isn't valid it returns a
+     * response
+     * 
+     * @param id the id of the ticket
+     * @return A ResponseEntity with a ApiResponse object.
+     */
     @Override
     public ResponseEntity<ApiResponse> checkTicket(String id) {
-        Ticket ticket = ticketRepository.findById(id).orElseThrow( () -> new TicketNotFoundException(id));
-        if (ticket.getCheck()){
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new TicketNotFoundException(id));
+        if (ticket.getCheck()) {
             return responseBuilder.buildResponse(HttpStatus.OK.value(), "El ticket ya se ha verificado");
         }
-        if(ticket.getStatus().equals(TicketStatus.REVISADO) && ticket.getQr() != null && !ticket.getCheck()){
+        if (ticket.getStatus().equals(TicketStatus.REVISADO) && ticket.getQr() != null && !ticket.getCheck()) {
             ticket.setCheck(true);
             ticketRepository.save(ticket);
             return responseBuilder.buildResponse(HttpStatus.OK.value(), "Ticket verificado, puede ingresar al bus");
         } else if (ticket.getStatus().equals(TicketStatus.PENDIENTE)) {
             return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El ticket aun no ha sido verificado");
-        }else{
-            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(), "El ticket esta caducado o no es válido");
+        } else {
+            return responseBuilder.buildResponse(HttpStatus.BAD_REQUEST.value(),
+                    "El ticket esta caducado o no es válido");
         }
     }
-
 
 }

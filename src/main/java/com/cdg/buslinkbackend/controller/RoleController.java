@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * It's a controller that handles all the requests that are related to the role
+ * entity.
+ */
 @RestController
 @RequestMapping("/protected/roles")
 public class RoleController {
@@ -22,24 +25,43 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    /**
+     * It returns a list of all the admins in the database
+     * 
+     * @return A list of all the admins.
+     */
     @GetMapping("/admins")
-    public ResponseEntity<Map<String, Object>> findAllAdmins(){
+    public ResponseEntity<Map<String, Object>> findAllAdmins() {
         Map<String, Object> response = new HashMap<>();
         List<Role> roleList = (List<Role>) roleService.findAllAdmins();
         response.put("roles", roleList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * This function returns a list of all the users that have the role of
+     * 'BUS_USER' in the database.
+     * 
+     * @return A list of roles
+     */
     @GetMapping("/bus")
-    public ResponseEntity<Map<String, Object>> findAllBusUsers(){
+    public ResponseEntity<Map<String, Object>> findAllBusUsers() {
         Map<String, Object> response = new HashMap<>();
         List<Role> roleList = (List<Role>) roleService.findAllBusUsers();
         response.put("roles", roleList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * It returns a response entity with a status code of 200 and a body of the role
+     * object that was
+     * found by the id
+     * 
+     * @param id The id of the role you want to find.
+     * @return A ResponseEntity object with a Role object inside.
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<Role> findById(@PathVariable final String id){
+    public ResponseEntity<Role> findById(@PathVariable final String id) {
         return ResponseEntity.ok(roleService.findById(id));
     }
 }

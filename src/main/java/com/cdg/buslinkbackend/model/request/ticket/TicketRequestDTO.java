@@ -5,6 +5,13 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TicketRequestDTO is a class that has a String cooperative, an Integer
+ * busNumber, a String client_id,
+ * a Double price, a String departureTime, a String origen, a String destiny,
+ * and a List of Integers
+ * seatings
+ */
 @Getter
 @Setter
 @NoArgsConstructor

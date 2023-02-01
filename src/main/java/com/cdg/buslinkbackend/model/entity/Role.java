@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+/**
+ * The Role class is a POJO that represents a role in the system
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,9 +25,9 @@ public class Role {
     @Field(targetType = FieldType.STRING)
     private RoleType name;
 
-    public Role(RoleType name){
+    // A constructor.
+    public Role(RoleType name) {
         this.name = name;
     }
-
 
 }

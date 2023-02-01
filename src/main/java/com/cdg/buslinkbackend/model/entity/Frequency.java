@@ -10,6 +10,10 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Frequency is a class that has a list of stops, and a list of stops is a list
+ * of strings
+ */
 @Getter
 @Setter
 @NoArgsConstructor

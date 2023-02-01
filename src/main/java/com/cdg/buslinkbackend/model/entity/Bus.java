@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
+/**
+ * Bus has a list of seating, and each seating has a list of passengers.
+ */
 @Getter
 @Setter
 @ToString
@@ -29,6 +32,5 @@ public class Bus {
     private List<Seating> seating;
     @DocumentReference
     private Cooperative cooperative;
-
 
 }

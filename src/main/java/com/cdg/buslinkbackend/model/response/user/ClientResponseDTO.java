@@ -2,6 +2,10 @@ package com.cdg.buslinkbackend.model.response.user;
 
 import lombok.*;
 
+/**
+ * This class is a DTO (Data Transfer Object) that represents the response of a
+ * client
+ */
 @Getter
 @Setter
 @Builder

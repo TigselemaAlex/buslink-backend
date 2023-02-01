@@ -18,7 +18,13 @@ public class JWTProvider {
     @Value("${jwt.expirationTimeInMs}")
     private int jwExpirationTimeInMs;
 
-
+    /**
+     * The function takes in an authentication object and returns a JWT token
+     * 
+     * @param authentication This is the authentication object that contains the
+     *                       user's credentials.
+     * @return A JWT token.
+     */
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
@@ -32,6 +38,14 @@ public class JWTProvider {
                 .compact();
     }
 
+    /**
+     * The function takes a JWT token as a parameter, parses it, and returns the
+     * username from the
+     * token
+     * 
+     * @param token The JWT token that you want to parse.
+     * @return The username of the user who is logged in.
+     */
     public String getUsernameFromJWT(String token) {
 
         Claims claims = Jwts.parserBuilder()
@@ -42,6 +56,13 @@ public class JWTProvider {
         return claims.getSubject();
     }
 
+    /**
+     * It takes a JWT token as a string, and returns true if the token is valid, and
+     * false if it is not
+     * 
+     * @param authToken The token that needs to be validated.
+     * @return A boolean value.
+     */
     public boolean validateToken(String authToken) {
         try {
 
@@ -50,11 +71,9 @@ public class JWTProvider {
                     .build()
                     .parseClaimsJws(authToken);
             return true;
-        } catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException
-                e) {
+        } catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             return false;
         }
     }
-
 
 }

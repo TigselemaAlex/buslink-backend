@@ -4,9 +4,18 @@ import com.cdg.buslinkbackend.model.entity.Frequency;
 import com.cdg.buslinkbackend.model.request.frequency.FrequencyRequestDTO;
 import com.cdg.buslinkbackend.model.response.frecuency.FrequencyResponseDTO;
 
+/**
+ * It takes a frequency object and returns a frequencyResponseDTO object
+ */
 public class FrequencyMapper {
 
-    public static FrequencyResponseDTO frequencyResponseDTOFromFrequency(Frequency frequency){
+    /**
+     * It takes a frequency object and returns a frequencyResponseDTO object
+     * 
+     * @param frequency Frequency
+     * @return A FrequencyResponseDTO object
+     */
+    public static FrequencyResponseDTO frequencyResponseDTOFromFrequency(Frequency frequency) {
         return FrequencyResponseDTO.builder()
                 .id(frequency.getId())
                 .origen(frequency.getOrigen())
@@ -19,7 +28,13 @@ public class FrequencyMapper {
                 .build();
     }
 
-    public static Frequency frequencyFromFrequencyRequestDTO(FrequencyRequestDTO frequencyRequestDTO){
+    /**
+     * It takes a FrequencyRequestDTO object and returns a Frequency object
+     * 
+     * @param frequencyRequestDTO
+     * @return A Frequency object
+     */
+    public static Frequency frequencyFromFrequencyRequestDTO(FrequencyRequestDTO frequencyRequestDTO) {
         return Frequency.builder()
                 .origen(frequencyRequestDTO.getOrigen())
                 .destiny(frequencyRequestDTO.getDestiny())

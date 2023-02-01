@@ -3,6 +3,10 @@ package com.cdg.buslinkbackend.model.response.user;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * UserResponseDTO is a class that represents a user response data transfer
+ * object
+ */
 @Getter
 @Setter
 @NoArgsConstructor

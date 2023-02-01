@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class is a DTO (Data Transfer Object) that is used to receive the
+ * username and password from
+ * the user when they login
+ */
 @Getter
 @Setter
 @NoArgsConstructor

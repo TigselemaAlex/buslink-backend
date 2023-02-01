@@ -5,6 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+/**
+ * Itinerary is a class that has a bus, frequency and departureTime
+ */
 @Getter
 @Setter
 @ToString
@@ -19,7 +22,7 @@ public class Itinerary {
     @DocumentReference
     private Bus bus;
     @DocumentReference
-    private Frequency  frequency;
+    private Frequency frequency;
     private String departureTime;
 
     public Itinerary(Bus bus, Frequency frequency, String departureTime) {

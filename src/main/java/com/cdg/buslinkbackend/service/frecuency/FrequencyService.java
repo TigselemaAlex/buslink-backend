@@ -4,6 +4,7 @@ import com.cdg.buslinkbackend.model.request.frequency.FrequencyRequestDTO;
 import com.cdg.buslinkbackend.util.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 
+// A service interface.
 public interface FrequencyService {
 
     ResponseEntity<ApiResponse> findAll();

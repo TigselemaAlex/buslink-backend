@@ -1,11 +1,12 @@
 package com.cdg.buslinkbackend.model.entity;
 
-
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+/**
+ * Client is a class that represents a client in the database
+ */
 @Getter
 @Setter
 @Builder

@@ -8,6 +8,9 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cooperative has a list of frequencies
+ */
 @Getter
 @Setter
 @NoArgsConstructor
