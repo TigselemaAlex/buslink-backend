@@ -175,7 +175,8 @@ public class TicketServiceImpl implements TicketService {
      */
     @Override
     public ResponseEntity<ApiResponse> findByClient(String idClient) {
-        List<Ticket> tickets = ticketRepository.findAll().stream().peek(
+        Client client = clientRepository.findById(idClient).orElseThrow(()-> new ClientNotFoundException(idClient));
+        List<Ticket> tickets = ticketRepository.findByClient(client).stream().peek(
                 ticket -> ticket.setReceipt(
                         ticket.getReceipt() != null ? ImageCompressor.decompressZLib(ticket.getReceipt()) : null))
                 .toList();

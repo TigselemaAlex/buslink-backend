@@ -144,7 +144,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 details.add(ex.getMessage());
                 ErrorDetails errors = new ErrorDetails(
                                 LocalDateTime.now(),
-                                "TAMAÑO MÁXIMO EXCEDIDO",
+                                "TAMANIO MAXIMO EXCEDIDO",
                                 details);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
